@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="renderer" content="webkit">
+
+  
+  <title>JMM Java内存模型 | 博客</title>
+
+  <link rel="shortcut icon" href="/images/favicon.png">
+  <link rel="alternate" href="/atom.xml" title="博客" type="application/atom+xml">
+  <meta name="description" content="JMM Java内存模型的一些概念  ¶ JMM(Java Memory Model) ¶ 并发编程的三个性质 JMM关键技术点是围绕着多线程的原子性、可见性、有序性来建立的。 ¶ 原子性 原子性是指一个操作是不可中断的，要么全部执行成功要么全部执行失败。 比如 a++ 操作，实际包含三步：  读取变量a的值，假如a&#x3D;1 a的值+1，为2 将2值赋值给变量a，此时a的值为2  这三步是不可分割的，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JMM Java内存模型">
+<meta property="og:url" content="http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="博客">
+<meta property="og:description" content="JMM Java内存模型的一些概念  ¶ JMM(Java Memory Model) ¶ 并发编程的三个性质 JMM关键技术点是围绕着多线程的原子性、可见性、有序性来建立的。 ¶ 原子性 原子性是指一个操作是不可中断的，要么全部执行成功要么全部执行失败。 比如 a++ 操作，实际包含三步：  读取变量a的值，假如a&#x3D;1 a的值+1，为2 将2值赋值给变量a，此时a的值为2  这三步是不可分割的，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/image-20201012155842619.png">
+<meta property="article:published_time" content="2020-10-14T11:53:49.000Z">
+<meta property="article:modified_time" content="2020-10-14T12:04:35.653Z">
+<meta property="article:author" content="Lampkins">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="JMM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/image-20201012155842619.png">
+
+  <meta name="keywords" content=",Java,JMM">
+  <meta name="format-detection" content="telephone=no,email=no">
+  <meta name="theme-color" content="#9C27B0">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="博客">
+  <meta name="msapplication-starturl" content="http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+  <meta name="msapplication-navbutton-color" content="#9C27B0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="博客">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="/images/favicon.png">
+
+  
+    <link rel="canonical" href="http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+  
+
+  
+  
+
+  
+  
+  
+
+  
+<link rel="stylesheet" href="/css/mdui.css">
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/custom.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="mdui-appbar-with-toolbar mdui-theme-primary-blue-grey mdui-theme-accent-blue">
+  <script>var a=localStorage.getItem("mdui-theme-layout-dark");if(a){document.getElementsByTagName("body")[0].className+=" mdui-theme-layout-dark"};</script>
+  <script>var a=localStorage.getItem("mdui-drawer-close");if(!a){document.getElementsByTagName("body")[0].className+=" mdui-drawer-body-left"};</script>
+  <header id="header" class="mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-hide mdui-appbar-inset">
+  <div class="mdui-toolbar mdui-color-theme">
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#sidebar', swipe: true}"><i class="mdui-icon material-icons">menu</i></a>
+    <a href="/" class="mdui-typo-headline">博客</a>
+    <div class="mdui-toolbar-spacer"></div>
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-dialog="{target: '#search'}" mdui-tooltip="{content: '搜索'}"><i class="mdui-icon material-icons">search</i></a>
+    <a href="/atom.xml" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: 'RSS'}"><i class="mdui-icon material-icons">rss_feed</i></a>
+    <a id="mode" href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: 'Day/Night'}"><i class="mdui-icon material-icons">brightness_5</i></a>
+  </div>
+</header>
+<div class="mdui-dialog" id="search">
+  
+    <div class="search-form">
+      <input type="search" class="search-form-input" placeholder="请输入关键字">
+    </div>
+    <div class="search-result" data-resource="/search.xml"></div>
+  
+</div>
+  <aside id="sidebar" class="mdui-drawer mdui-drawer-full-height mdui-shadow-3">
+  <script>var a=localStorage.getItem("mdui-drawer-close");if(a){document.getElementById("sidebar").className+=" mdui-drawer-close"};</script>
+  <div class="mdui-grid-tile">
+    <img src="/images/banner1.jpg" style="height: auto;">
+    <img src="/images/avatar1.jpg" class="avatar-animation" style="position: absolute; top: 10%; left: 24px; width: 64px; height: 64px; border: 2px solid #fff; border-radius: 50%;">
+    <div class="mdui-grid-tile-actions">
+      <div class="mdui-grid-tile-text">
+        <div class="mdui-grid-tile-title">Lampkins</div>
+        <div class="mdui-grid-tile-subtitle"><i class="mdui-icon material-icons">art_track</i>Creator by ❤️</div>
+      </div>
+      
+        <div class="mdui-grid-tile-buttons">
+          <a href="mailto:1726538752@foxmail.com" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '1726538752@foxmail.com'}"><i class="mdui-icon material-icons">email</i></a>
+        </div>
+      
+    </div>
+  </div>
+
+  <div class="mdui-list" mdui-collapse="{accordion: true}">
+    <a href="/" class="mdui-list-item mdui-ripple">
+      <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-blue">home</i>
+      <div class="mdui-list-item-content">主页</div>
+    </a>
+    <div class="mdui-collapse-item">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-deep-orange">archive</i>
+        <div class="mdui-list-item-content">归档</div>
+        <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
+        
+        <a class="mdui-ripple sidebar_archives-link" href="/archives/2020/10/">十月 2020<span class="mdui-ripple sidebar_archives-count">3</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/09/">九月 2020<span class="mdui-ripple sidebar_archives-count">2</span></a>
+        
+      </div>
+    </div>
+    <div class="mdui-collapse-item">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-green">class</i>
+        <div class="mdui-list-item-content">分类</div>
+        <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
+        
+        <a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术<span class="mdui-ripple sidebar_archives-count">3</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试<span class="mdui-ripple sidebar_archives-count">2</span></a>
+        
+      </div>
+    </div>
+    <div class="mdui-collapse-item">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-brown">bookmark</i>
+        <div class="mdui-list-item-content">标签</div>
+        <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
+        
+        <a class="mdui-ripple sidebar_archives-link" href="/tags/JMM/" rel="tag">JMM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/JVM/" rel="tag">JVM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Java/" rel="tag">Java<span class="mdui-ripple sidebar_archives-count">3</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Redis/" rel="tag">Redis<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/hexo/" rel="tag">hexo<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/markdown/" rel="tag">markdown<span class="mdui-ripple sidebar_archives-count">1</span></a>
+        
+      </div>
+    </div>
+    <a href="/about" class="mdui-list-item mdui-ripple">
+      <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-purple">person</i>
+      <div class="mdui-list-item-content">关于</div>
+    </a>
+  </div>
+
+  <div class="mdui-divider"></div>
+
+  <div class="mdui-list" mdui-collapse="{accordion: true}">
+    
+      <a href="/tagcloud" class="mdui-list-item mdui-ripple">标签云</a>
+    
+      <a href="/gallery" class="mdui-list-item mdui-ripple">画廊</a>
+    
+    <div class="mdui-collapse-item">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <div class="mdui-list-item-content">友情链接</div>
+        <i class="mdui-list-item-icon mdui-icon material-icons">link</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
+        
+          <a href="http://imgbed.cn/" target="_blank" class="mdui-list-item mdui-p-l-2 mdui-text-color-theme-accent mdui-ripple" style="justify-content: center;">路过图床</a>
+        
+          <a href="https://github.com/niemingzhao/niemingzhao.github.io/tree/theme" target="_blank" class="mdui-list-item mdui-p-l-2 mdui-text-color-theme-accent mdui-ripple" style="justify-content: center;">博客主题</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</aside>
+  <main id="main" class="mdui-m-t-5 fadeIn animated">
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  <style>#main article .mdui-card-content .center-block{display:block!important;margin-right:auto!important;margin-left:auto!important}</style>
+  <article class="mdui-card mdui-m-b-5" style="margin-top: -40px !important;">
+    <header class="mdui-card-media">
+      <img src="/images/random/material-16.png" style="max-height: 240px;">
+      <div class="mdui-card-media-covered">
+        <div class="mdui-card-primary">
+          <div class="mdui-card-primary-title">JMM Java内存模型</div>
+          <div class="mdui-card-primary-subtitle"><i class="iconfont">&#xe697;</i> 2020-10-14 / <i class="iconfont">&#xe601;</i> Lampkins &nbsp;&nbsp; <span id="busuanzi_container_page_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_page_pv"></span></span></div>
+        </div>
+      </div>
+      <div class="mdui-card-menu">
+        
+          <button class="mdui-btn mdui-btn-icon mdui-text-color-white" mdui-menu="{target: '#qrcode', align: 'right'}"><i class="mdui-icon material-icons">devices</i></button>
+          <ul class="mdui-menu" id="qrcode">
+            
+              <li class="mdui-menu-item"><a class="mdui-text-center mdui-ripple">发送到手机</a></li>
+            
+            <li class="mdui-menu-item" disabled>
+              
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAAC0ElEQVR42u3aW47jMAwEQN//0rsnsNMkNYgjlb+CPGyVBpgGSV3/jrwubGxsbGxsbGxs7Feyr/i6+/7d3Z6fcru4m2dN1oyNjY19AvvDv/6AfffO86YkG3G3hvz72NjY2Oewn0k5L4mfydZU14yNjY2N/Qx7BueFTW+zsLGxsbH/IsAmd6huNzY2NjZ2r0EzwVTHAPl6/rCXho2Njf16drV4eMPrL8y3sbGxsV/J7l1J2CQxUy0wRmvGxsbG3pQ9P9pYvUMVmXwafRMbGxt7U3YeOc9xkkTOfJCcb3Eht7GxsbF/nJ0cppkETK+hX20hLRgPYGNjY/8sO3lwstz5MZ3qoDfZGmxsbOxz2Ek4VUMrb/rkbaOEXQgwbGxs7C3YyS2q4ZGH1iSQktViY2Njn8CeY6rblw8GeiPeUW5jY2Nj/yB70sqpFgz5UyalyOikEjY2NvYPsqvNowlvVYOpd2wIGxsbe292r1TIedXf5k2lvLWEjY2NfQK71+KZHIu84muy9djY2NjYyRYkv81DMT8kVNgUbGxs7E3ZycGayTt5c39tvH0oRbCxsbG3Y1eDJB8eVMcM1ddJmGFjY2PvzV41lO2VK70gjI5a9iowbGxs7C3Y1RIib/HkZcPaPwM2Njb23uz5SDUPs/xu1aeMxgPY2NjYG7F749hq46nanMobVaOpCDY2NvYW7DyEep/msN56PvwKGxsbe2t2tZWTg3slx+R9bGxsbOzemLba4skXfQ0ubGxs7BPY1SsvSPIFrWpyFZpK2NjY2Buxq2GwdkzbO15ZHVFgY2Njn8DOQ6t3IHKyQb3WFTY2NvaZ7N7S89IiPwY0idhygGFjY2MfzF51RLLXqKoGHjY2NjZ2PqZdFV3JfQolCjY2NvYB7Hy4mwdJUsAkpOpQARsbG/s09qpBb3W4uzbqvjbfxsbGxv4q+5wLGxsbGxsbGxsb+zXXfwNOucx1l7tZAAAAAElFTkSuQmCC">
+              
+            </li>
+          </ul>
+        
+        
+          <button class="mdui-btn mdui-btn-icon mdui-text-color-white" mdui-menu="{target: '#share_menu', align: 'right'}"><i class="mdui-icon material-icons">share</i></button>
+          <ul class="mdui-menu" id="share_menu">
+            <li class="mdui-menu-item">
+              <a href="http://service.weibo.com/share/share.php?appkey=&title=JMM Java内存模型&url=http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/&pic=http://lampkins.gitee.io/images/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="https://twitter.com/intent/tweet?text=JMM Java内存模型&url=http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/&via=Lampkins" target="_blank" class="mdui-ripple">分享到 Twitter</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="https://www.facebook.com/sharer/sharer.php?u=http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="https://plus.google.com/share?url=http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" target="_blank" class="mdui-ripple">分享到 Google+</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/&title=JMM Java内存模型" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="http://connect.qq.com/widget/shareqq/index.html?site=博客&title=JMM Java内存模型&pics=http://lampkins.gitee.io/images/favicon.png&url=http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" target="_blank" class="mdui-ripple">分享到 QQ</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="https://telegram.me/share/url?url=http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/&text=JMM Java内存模型" target="_blank" class="mdui-ripple">分享到 Telegram</a>
+            </li>
+          </ul>
+        
+      </div>
+    </header>
+    <div class="mdui-card-content mdui-typo">
+      <p>JMM Java内存模型的一些概念</p>
+<hr>
+<h1 id="JMM(Java%20Memory%20Model)"><a class="header-anchor" href="#JMM(Java%20Memory%20Model)">¶</a> JMM(Java Memory Model)</h1>
+<h2 id="%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E4%B8%89%E4%B8%AA%E6%80%A7%E8%B4%A8"><a class="header-anchor" href="#%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E4%B8%89%E4%B8%AA%E6%80%A7%E8%B4%A8">¶</a> 并发编程的三个性质</h2>
+<p>JMM关键技术点是围绕着多线程的原子性、可见性、有序性来建立的。</p>
+<h3 id="%E5%8E%9F%E5%AD%90%E6%80%A7"><a class="header-anchor" href="#%E5%8E%9F%E5%AD%90%E6%80%A7">¶</a> 原子性</h3>
+<p>原子性是指<strong>一个操作是不可中断的，要么全部执行成功要么全部执行失败</strong>。</p>
+<p>比如 a++ 操作，实际包含三步：</p>
+<ol>
+<li>读取变量a的值，假如a=1</li>
+<li>a的值+1，为2</li>
+<li>将2值赋值给变量a，此时a的值为2</li>
+</ol>
+<p>这三步是不可分割的，所以必须保证这3步操作时原子性的，在操作a++的过程中，其他线程不会改变a的值，如果在该过程中出现其他线程修改了a的值，上面的操作应该执行失败。</p>
+<p>java中实现原子操作的方法大致有2种：<strong>锁机制、无锁CAS机制</strong></p>
+<h3 id="%E5%8F%AF%E8%A7%81%E6%80%A7"><a class="header-anchor" href="#%E5%8F%AF%E8%A7%81%E6%80%A7">¶</a> 可见性</h3>
+<p>可见性是指<strong>一个线程对共享变量的修改，对于其他线程来说是可以看到的</strong>。</p>
+<p>共享变量可见性的<strong>实现原理</strong>：</p>
+<ol>
+<li>线程A在自己的工作内存中修改变量之后，需要将变量的值刷新到主内存中</li>
+<li>线程B要把主内存中变量的值更新到工作内存中</li>
+</ol>
+<p>关于线程可见性的控制，可以使用<strong>volatile、synchronized、锁</strong>来实现</p>
+<h3 id="%E6%9C%89%E5%BA%8F%E6%80%A7"><a class="header-anchor" href="#%E6%9C%89%E5%BA%8F%E6%80%A7">¶</a> 有序性</h3>
+<p>有序性指的是<strong>程序按照代码的先后顺序执行</strong>。</p>
+<p>为了性能优化，编译器和处理器会进行指令重排序，有时候会改变程序语句的先后顺序，比如程序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>; <span class="comment">//1 </span></span><br><span class="line"><span class="keyword">int</span> b = <span class="number">20</span>; <span class="comment">//2 </span></span><br><span class="line"><span class="keyword">int</span> c = a + b; <span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+<p>编译器优化后可能变成：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> b = <span class="number">20</span>; <span class="comment">//1 </span></span><br><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>; <span class="comment">//2 </span></span><br><span class="line"><span class="keyword">int</span> c = a + b; <span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+<h2 id="Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><a class="header-anchor" href="#Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B">¶</a> Java内存模型</h2>
+<p>​		JMM决定一个线程对共享变量的写入何时对另一个线程可见。从抽象的角度来看，JMM定义了线程和主内存之间的抽象关系：<strong>线程之间的共享变量存储在主内存（main memory）中，每个线程都有一个私有的本地内存（local memory），本地内存中存储了该线程以读/写共享变量的副本。</strong></p>
+<p>​		**作用：**在并行机制的前提下，定义了一种规则，保证多个线程间可以有效正确地协同工作。</p>
+<p>​		本地内存是JMM的一个抽象概念，并不真实存在。它涵盖了缓存，写缓冲区，寄存器以及其他的硬件和编译器优化。其关系模型图如下图所示：</p>
+<p><img src="/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/image-20201012155842619.png" alt="image-20201012155842619" class="fancybox"></p>
+<p>从上图中可以看出，线程A需要和线程B通信，必须要经历下面2个步骤：</p>
+<ol>
+<li>首先，线程A把本地内存A中更新过的共享变量刷新到主内存中去</li>
+<li>然后，线程B到主内存中去读取线程A之前已更新过的共享变量</li>
+</ol>
+<p><strong>一个例子</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">T1</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">T1</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(name);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程&quot;</span> + <span class="keyword">this</span>.getName() + <span class="string">&quot; in&quot;</span>);</span><br><span class="line">            <span class="keyword">while</span> (flag) &#123;;&#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程&quot;</span> + <span class="keyword">this</span>.getName() + <span class="string">&quot;停止了&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> T1(<span class="string">&quot;t1&quot;</span>).start();</span><br><span class="line">        <span class="comment">//休眠1秒</span></span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        <span class="comment">//将flag置为false</span></span><br><span class="line">        flag = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行后会发现程序无法终止，也就是说主线程将flag修改为false后，线程t1获取的flag的值依旧为true。</p>
+<p><strong>可能的原因：</strong></p>
+<ul>
+<li>
+<p>主线程修改了flag之后，未将其刷新到主内存，所以t1看不到</p>
+</li>
+<li>
+<p>主线程将flag刷新到了主内存，但是t1一直读取的是自己工作内存中flag的值，没有去主内存中获 取flag最新的值</p>
+</li>
+</ul>
+<p><strong>解决：</strong></p>
+<p>​		使用volatile修饰共享变量，<code>public volatile static boolean flag = true;</code></p>
+<blockquote>
+<p>被volatile修改的 变量有以下特点：</p>
+<ol>
+<li>线程中读取的时候，每次读取都会去主内存中读取共享变量最新的值，然后将其复制到工作内存</li>
+<li>线程中修改了工作内存中变量的副本，修改之后会立即刷新到主内存</li>
+</ol>
+</blockquote>
+<p><strong>运行结果：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">线程t1 in</span><br><span class="line">线程t1停止了</span><br></pre></td></tr></table></figure>
+<p>从该例子可知，<strong>volatile解决了共享变量在多线程中可见性的问题</strong>。</p>
+<blockquote>
+<p>更多内容：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zs88897/article/details/106385245/">JMM理解整理</a></p>
+</blockquote>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css">
+      
+        <div class="mdui-m-y-2 mdui-text-center">
+          <button class="mdui-fab mdui-color-deep-orange mdui-text-color-white mdui-ripple" mdui-dialog="{target: '#donate'}" mdui-tooltip="{content: '打赏', position: 'top'}"><i class="mdui-icon material-icons">thumb_up</i></button>
+        </div>
+      
+      <blockquote>
+        
+        <strong>本文链接：</strong><br><a href="http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">http://lampkins.gitee.io/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</a>
+      </blockquote>
+    </div>
+    <footer class="mdui-card-actions">
+      
+        <a class="mdui-ripple article_categories-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+      
+      
+        <a class="mdui-ripple article_tags-link" href="/tags/JMM/" rel="tag">JMM</a><a class="mdui-ripple article_tags-link" href="/tags/Java/" rel="tag">Java</a>
+      
+    </footer>
+    
+      <div class="mdui-dialog" id="donate">
+        <div class="mdui-tab mdui-tab-centered">
+          
+            <a href="#donate-0" class="mdui-ripple">QQ支付</a>
+          
+            <a href="#donate-1" class="mdui-ripple">支付宝</a>
+          
+        </div>
+        
+        
+          <div id="donate-0" class="mdui-p-a-2 mdui-typo mdui-text-center">
+            
+              <img src="/images/qqpay.jpg" style="width: 300px;">
+            
+          </div>
+        
+          <div id="donate-1" class="mdui-p-a-2 mdui-typo mdui-text-center">
+            
+              <img src="/images/alipay.jpg" style="width: 300px;">
+            
+          </div>
+        
+      </div>
+    
+  </article>
+  
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+  <script>$("#main article .mdui-card-content img.fancybox").on("click",function(e){$.fancybox.open({src:$(this).attr("src")});});</script>
+
+
+  <nav id="paginator">
+    
+    <div class="spacer"></div>
+    
+      <a rel="next" class="extend next" href="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+        <span class="mdui-p-x-3" mdui-tooltip="{content: 'Redis基础 学习笔记'}">下一篇</span>
+        <button aria-label="next" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_forward</i></button>
+      </a>
+    
+  </nav>
+
+
+  <div id="comment" class="mdui-m-t-5 mdui-m-x-1">
+    <div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+  var gitalk = new Gitalk({
+    clientID: 'd17f668bcd7f140d735f',
+    clientSecret: '3058f2300347db4f27a87d10648565e8d0549033',
+    repo: 'Lampkins.github.io',
+    owner: 'lampkins',
+    admin: ['lampkins'],
+    id: 'ba298889-a813-b101-12aa-ed326b2c0e44' || location.pathname,
+    distractionFreeMode: false
+  });
+  gitalk.render('gitalk-container');
+</script>
+  </div>
+
+
+
+  <div style="position: fixed !important; right: 16px; top: 30%;">
+    <button class="mdui-fab mdui-fab-mini mdui-ripple" mdui-menu="{target: '#toc'}"><i class="mdui-icon material-icons">toc</i></button>
+    <ul class="mdui-menu" id="toc">
+      <li class="mdui-menu-item" disabled><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JMM(Java%20Memory%20Model)"><span class="toc-text"> JMM(Java Memory Model)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E4%B8%89%E4%B8%AA%E6%80%A7%E8%B4%A8"><span class="toc-text"> 并发编程的三个性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-text"> 原子性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-text"> 可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="toc-text"> 有序性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="toc-text"> Java内存模型</span></a></li></ol></li></ol></li>
+    </ul>
+  </div>
+</main>
+  <footer id="footer" class="mdui-m-t-5 mdui-p-y-3 mdui-color-theme">
+  <div class="mdui-p-y-0 mdui-text-center">
+    
+      <a href="https://github.com/Lampkins" target="_blank" class="mdui-btn mdui-btn-icon mdui-text-color-theme-a100"><i class="mdui-icon iconfont">&#xe7ab;</i></a>
+    
+    
+      <a href="https://gitee.com/lampkins" target="_blank" class="mdui-btn mdui-btn-icon mdui-text-color-theme-a100"><i class="mdui-icon iconfont1">&#xe686;</i></a>
+    
+    
+    
+    
+    
+    
+      <a href="https://www.instagram.com/arimis0" target="_blank" class="mdui-btn mdui-btn-icon mdui-text-color-theme-a100"><i class="mdui-icon iconfont1">&#xe736;</i></a>
+    
+    
+    
+    
+    
+    
+      <a href="https://qm.qq.com/cgi-bin/qm/qr?k=g3rAKPWjqKBJ7oezteErpQGrtxISDNmp&noverify=0" target="_blank" class="mdui-btn mdui-btn-icon mdui-text-color-theme-a100"><i class="mdui-icon iconfont">&#xe651;</i></a>
+    
+    
+  </div>
+  <div class="mdui-p-y-1 mdui-text-center">
+    Copyright &copy; 2019 - 2020 Lampkins<br>
+    Powered by <a href="https://hexo.io/" target="_blank" class="mdui-text-color-theme-accent">Hexo</a>
+    <br>
+      <span id="busuanzi_container_site_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_site_pv"></span></span> &nbsp;&nbsp;
+      <span id="busuanzi_container_site_uv" style="display: none;"><i class="iconfont">&#xe601;</i> <span id="busuanzi_value_site_uv"></span></span>
+    
+  </div>
+</footer>
+  <button id="gotop" class="mdui-fab mdui-fab-fixed mdui-fab-hide mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_upward</i></button>
+  <script async src="http://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+<script src="/js/mdui.js"></script>
+<script src="/js/script.js"></script>
+
+  
+<script src="/custom.js"></script>
+
+</body>
+</html>

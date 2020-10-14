@@ -44,14 +44,19 @@ $$.fn.extend({
     }
   }
 });
+if (localStorage.getItem('mdui-theme-layout-dark')) {
+    $$('#mode i').text('brightness_4');
+}
 $$(function () {
-  $$('#header').longPress(function (e) {
+  $$('#mode').on('click', function (e) {
     if ($$('body').hasClass('mdui-theme-layout-dark')) {
       $$('body').removeClass('mdui-theme-layout-dark');
       localStorage.removeItem('mdui-theme-layout-dark');
+      $$('#mode i').text('brightness_5');
     } else {
       $$('body').addClass('mdui-theme-layout-dark');
       localStorage.setItem('mdui-theme-layout-dark', true);
+      $$('#mode i').text('brightness_4');
     }
   });
   var tab = new mdui.Tab('#donate .mdui-tab');
