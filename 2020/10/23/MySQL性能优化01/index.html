@@ -8,30 +8,31 @@
   <meta name="renderer" content="webkit">
 
   
-  <title>Hello World | 博客</title>
+  <title>MySQL性能优化01：主题和目标 | 博客</title>
 
   <link rel="shortcut icon" href="/images/favicon.png">
   <link rel="alternate" href="/atom.xml" title="博客" type="application/atom+xml">
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. ¶ Qui">
+  <meta name="description" content="MySQL课程主题和目标 ¶ 主题： 你真的会使用MySQL索引进行性能优化吗?  ¶ 目标   性能分析要从三驾马车开始(慢查询日志、explain执行计划、 show profile )   有了性能分析报告，接下来如何对性能进行优化呢？   我们一定要搞清楚通过explain显示查询计划中关于索引是否被用到 1234-- id是主键-- name是非唯一索引-- MySQL在执行查询时一般只">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://lampkins.gitee.io/2020/09/12/hello-world/index.html">
+<meta property="og:title" content="MySQL性能优化01：主题和目标">
+<meta property="og:url" content="http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/index.html">
 <meta property="og:site_name" content="博客">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. ¶ Qui">
+<meta property="og:description" content="MySQL课程主题和目标 ¶ 主题： 你真的会使用MySQL索引进行性能优化吗?  ¶ 目标   性能分析要从三驾马车开始(慢查询日志、explain执行计划、 show profile )   有了性能分析报告，接下来如何对性能进行优化呢？   我们一定要搞清楚通过explain显示查询计划中关于索引是否被用到 1234-- id是主键-- name是非唯一索引-- MySQL在执行查询时一般只">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-09-12T02:14:10.000Z">
-<meta property="article:modified_time" content="2020-10-13T14:46:27.593Z">
+<meta property="article:published_time" content="2020-10-23T09:32:30.000Z">
+<meta property="article:modified_time" content="2020-10-23T09:34:03.380Z">
 <meta property="article:author" content="Lampkins">
-<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="MySQL索引">
 <meta name="twitter:card" content="summary">
 
-  <meta name="keywords" content=",hexo">
+  <meta name="keywords" content=",MySQL,MySQL索引">
   <meta name="format-detection" content="telephone=no,email=no">
   <meta name="theme-color" content="#9C27B0">
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="博客">
-  <meta name="msapplication-starturl" content="http://lampkins.gitee.io/2020/09/12/hello-world/">
+  <meta name="msapplication-starturl" content="http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/">
   <meta name="msapplication-navbutton-color" content="#9C27B0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="博客">
@@ -39,7 +40,7 @@
   <link rel="apple-touch-icon" href="/images/favicon.png">
 
   
-    <link rel="canonical" href="http://lampkins.gitee.io/2020/09/12/hello-world/">
+    <link rel="canonical" href="http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/">
   
 
   
@@ -174,11 +175,11 @@
   <style>#main article .mdui-card-content .center-block{display:block!important;margin-right:auto!important;margin-left:auto!important}</style>
   <article class="mdui-card mdui-m-b-5" style="margin-top: -40px !important;">
     <header class="mdui-card-media">
-      <img src="/images/random/material-8.png" style="max-height: 240px;">
+      <img src="/images/random/material-17.png" style="max-height: 240px;">
       <div class="mdui-card-media-covered">
         <div class="mdui-card-primary">
-          <div class="mdui-card-primary-title">Hello World</div>
-          <div class="mdui-card-primary-subtitle"><i class="iconfont">&#xe697;</i> 2020-09-12 / <i class="iconfont">&#xe601;</i> Lampkins &nbsp;&nbsp; <span id="busuanzi_container_page_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_page_pv"></span></span></div>
+          <div class="mdui-card-primary-title">MySQL性能优化01：主题和目标</div>
+          <div class="mdui-card-primary-subtitle"><i class="iconfont">&#xe697;</i> 2020-10-23 / <i class="iconfont">&#xe601;</i> Lampkins &nbsp;&nbsp; <span id="busuanzi_container_page_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_page_pv"></span></span></div>
         </div>
       </div>
       <div class="mdui-card-menu">
@@ -190,7 +191,7 @@
             
             <li class="mdui-menu-item" disabled>
               
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACXUlEQVR42u3aQW6DQAwF0Nz/0u22UhXybYNB0WOF0hDmzWLs2n79fPX1wsPDw8PDw8PDexjvFV/vnnr3yfFb/n7+/360Njw8PLwV3oejNv5OwrjivXh4eHh38fLjOwkMyV+P2dW14eHh4T2Z9+FoPkx5EzweHh7e9/GqG3FMTTYODw8P75m85MV5opwUgo/XcEOtBQ8PDy/m5U2m/fvV/h4eHh5ewCuPNA3GCHrhYTR0hYeHh3cBb5IQV9PrfOyguh48PDy8fV5vhLRXXJgHkuZ/DHh4eHgn8ZIEOj+U5w2t3qbj4eHhbfImza2EkWxcMl4wqlLj4eHhrfCSwJAPB1RT7Xxb8fDw8PZ5vRLDq3XlSXOvqIGHh4f3HF4v/c3fMl8PHh4e3r28/ECPXjb+hXz78PDw8HZ41TbVBBMtbl7ywMPDw1vk5Ulz3ujKtynfmg9P4eHh4a3zJsGgOibVG1AYDV3h4eHhncSrFiN6aXTU+G+NF+Dh4eHt86qNqOuaZEm4GtVa8PDw8E7i5Y2ovKAwL21Uk3g8PDy8TV6S5s6HA/IlVpF4eHh4d/EmyXSS/vaWXh4+wMPDw1vkJUd8XoStJt+99hseHh7ePq969cqyeUG2Gio+FCPw8PDwLuBNDuVqSp0HhuT7hbiHh4eHdwEvDwbVAdZqqOg1vfDw8PDu4p01EJB/njfPCqVhPDw8vMfzqiXgajpeLiXj4eHhPZhXxSQbUQ0kFwYGPDw8vJOKEeV21GCYtZdY4+Hh4e3w8p/r3VfDRvUpPDw8vE3e9114eHh4eHh4eHgPuH4B7D3tOZwfKEQAAAAASUVORK5CYII=">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAAC0klEQVR42u3aQW7kMAwEQP//07vXAAt7uiljM5DKp2AgyyzlQIjk9efI58LGxsbGxsbGxsb+SvYVPz/XFx/7Z/3dL89fvPsliRkbGxv7BHYeeht0snO7QxszNjY29jnsPGklCeatoJ/3L2LGxsbGxg7WJ9eJ26tCfqnAxsbGxn41gT2H3h7Q3W7Y2NjY2G8VlWblpLzlkO/2X2tp2NjY2F/PnjV6f/fvX+tvY2NjY38Zu32eC/d5QX9l/2Hk2NjY2Juy2zHH2XDPSjMg3+3DPwMbGxt7U3YCbpPTDNB+sS05YWNjY+/Kbsv6CW/94tHio+SKjY2NvTU7b+u2K2fDncmBtg1gbGxs7L3Z7wbRXh7ebTzX/W1sbGzsLdj5FSIJIg+uTXj5QWBjY2Ofw84TSX5MeVN2VsYa7oyNjY29KXu20SyRrIxptiM+2NjY2Gey37oAJAGtNIOTMhY2NjY29kpBvw2rHRua7YaNjY29N7sdbZy1ftuUM4sQGxsb+0z2rHA/W18Xg9pEdbceGxsbe1N2W5R/XpOU/ttLRb7bh5SJjY2NvTW7TR55m/at0GfDQ9jY2NgnsGcpar38tLImT3vY2NjYJ7CLBBAP7uRJKIfNrivY2NjYp7HzgNrUNUtRCa+IBxsbG3trdv75/N3ZWyulpQ/tCmxsbOyt2bPrRF3WyQcl46tIkYaxsbGxN2WvpIfkapE3kovhm9kv2NjY2Juy3yoeJelwNnZzBc8wb2NjY2Nvx84LQLO38oSXHG4bDzY2Nvau7Ct+ksLQShs4P4g8vWFjY2Ofw25LP215aHYEK62Ioj2AjY2NvRH7+fNJEaq9QuQjPkWiWmn0YmNjYx/ATj6cB1qkn3iH+iqCjY2NfTD7+WMvj06OmrvY2NjYp7Fnzd0ihSwnyKVhUGxsbOyt2esDjuvl+5w9jBAbGxt7U/Y5DzY2NjY2NjY2NvbXPH8BAbxJS/aFL6wAAAAASUVORK5CYII=">
               
             </li>
           </ul>
@@ -199,45 +200,82 @@
           <button class="mdui-btn mdui-btn-icon mdui-text-color-white" mdui-menu="{target: '#share_menu', align: 'right'}"><i class="mdui-icon material-icons">share</i></button>
           <ul class="mdui-menu" id="share_menu">
             <li class="mdui-menu-item">
-              <a href="http://service.weibo.com/share/share.php?appkey=&title=Hello World&url=http://lampkins.gitee.io/2020/09/12/hello-world/&pic=http://lampkins.gitee.io/images/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
+              <a href="http://service.weibo.com/share/share.php?appkey=&title=MySQL性能优化01：主题和目标&url=http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/&pic=http://lampkins.gitee.io/images/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://twitter.com/intent/tweet?text=Hello World&url=http://lampkins.gitee.io/2020/09/12/hello-world/&via=Lampkins" target="_blank" class="mdui-ripple">分享到 Twitter</a>
+              <a href="https://twitter.com/intent/tweet?text=MySQL性能优化01：主题和目标&url=http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/&via=Lampkins" target="_blank" class="mdui-ripple">分享到 Twitter</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://www.facebook.com/sharer/sharer.php?u=http://lampkins.gitee.io/2020/09/12/hello-world/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://plus.google.com/share?url=http://lampkins.gitee.io/2020/09/12/hello-world/" target="_blank" class="mdui-ripple">分享到 Google+</a>
+              <a href="https://plus.google.com/share?url=http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/" target="_blank" class="mdui-ripple">分享到 Google+</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://lampkins.gitee.io/2020/09/12/hello-world/&title=Hello World" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
+              <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/&title=MySQL性能优化01：主题和目标" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="http://connect.qq.com/widget/shareqq/index.html?site=博客&title=Hello World&pics=http://lampkins.gitee.io/images/favicon.png&url=http://lampkins.gitee.io/2020/09/12/hello-world/" target="_blank" class="mdui-ripple">分享到 QQ</a>
+              <a href="http://connect.qq.com/widget/shareqq/index.html?site=博客&title=MySQL性能优化01：主题和目标&pics=http://lampkins.gitee.io/images/favicon.png&url=http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/" target="_blank" class="mdui-ripple">分享到 QQ</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://telegram.me/share/url?url=http://lampkins.gitee.io/2020/09/12/hello-world/&text=Hello World" target="_blank" class="mdui-ripple">分享到 Telegram</a>
+              <a href="https://telegram.me/share/url?url=http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/&text=MySQL性能优化01：主题和目标" target="_blank" class="mdui-ripple">分享到 Telegram</a>
             </li>
           </ul>
         
       </div>
     </header>
     <div class="mdui-card-content mdui-typo">
-      <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick%20Start"><a class="header-anchor" href="#Quick%20Start">¶</a> Quick Start</h2>
-<h3 id="Create%20a%20new%20post"><a class="header-anchor" href="#Create%20a%20new%20post">¶</a> Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run%20server"><a class="header-anchor" href="#Run%20server">¶</a> Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate%20static%20files"><a class="header-anchor" href="#Generate%20static%20files">¶</a> Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy%20to%20remote%20sites"><a class="header-anchor" href="#Deploy%20to%20remote%20sites">¶</a> Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+      <p>MySQL课程主题和目标</p>
+<h2 id="%E4%B8%BB%E9%A2%98%EF%BC%9A"><a class="header-anchor" href="#%E4%B8%BB%E9%A2%98%EF%BC%9A">¶</a> 主题：</h2>
+<p>你真的会使用MySQL索引进行性能优化吗?</p>
+<hr>
+<h2 id="%E7%9B%AE%E6%A0%87"><a class="header-anchor" href="#%E7%9B%AE%E6%A0%87">¶</a> 目标</h2>
+<ol>
+<li>
+<p>性能分析要从三驾马车开始(慢查询日志、<strong>explain执行计划</strong>、 show profile )</p>
+</li>
+<li>
+<p>有了性能分析报告，接下来如何对性能进行优化呢？</p>
+</li>
+<li>
+<p><strong>我们一定要搞清楚通过explain显示查询计划中关于索引是否被用到</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- id是主键</span></span><br><span class="line"><span class="comment">-- name是非唯一索引</span></span><br><span class="line"><span class="comment">-- MySQL在执行查询时一般只会用到一个索引（优化器去进行选择）</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">and</span> <span class="keyword">name</span>= <span class="string">&#x27;zhangsan&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>你知道MySQL的索引在执行过程中是如何被使用的吗？</strong></p>
+</li>
+<li>
+<p><strong>你知道MySQL中的表数据和索引在底层是如何存储的吗？</strong></p>
+</li>
+<li>
+<p>你了解聚集索引（ IOT索引组织表）和非聚集索引（堆组织表）的存储方式的不同吗？</p>
+</li>
+<li>
+<p>你知道聚集索引中的主键索引和辅助索引是如何存储索引和数据的吗？</p>
+</li>
+<li>
+<p>你会正确使用组合索引吗？</p>
+</li>
+<li>
+<p>你明白最左前缀原则是怎么回事吗？</p>
+</li>
+<li>
+<p>你明白什么是索引覆盖吗？索引覆盖如何优化检索性能？</p>
+</li>
+<li>
+<p><strong>如何正确使用索引，才不会引起索引失效？</strong></p>
+</li>
+</ol>
+<hr>
+<blockquote>
+<p><a href>MySQL性能优化01：主题和目标</a></p>
+<p><a href>MySQL性能优化02：MySQL架构篇</a></p>
+<p><a href>MySQL性能优化03：MySQL性能分析篇</a></p>
+<p><a href>MySQL性能优化04：MySQL索引篇01索引讲解</a></p>
+<p><a href>MySQL性能优化05：MySQL索引篇02查看执行计划</a></p>
+<p><a href>MySQL性能优化06：MySQL索引篇03索引失效分析</a></p>
+<p><a href>MySQL性能优化07：性能优化篇</a></p>
+</blockquote>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css">
       
         <div class="mdui-m-y-2 mdui-text-center">
@@ -246,15 +284,15 @@
       
       <blockquote>
         
-        <strong>本文链接：</strong><br><a href="http://lampkins.gitee.io/2020/09/12/hello-world/">http://lampkins.gitee.io/2020/09/12/hello-world/</a>
+        <strong>本文链接：</strong><br><a href="http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/">http://lampkins.gitee.io/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/</a>
       </blockquote>
     </div>
     <footer class="mdui-card-actions">
       
-        <a class="mdui-ripple article_categories-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
+        <a class="mdui-ripple article_categories-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><a class="mdui-ripple article_categories-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
       
       
-        <a class="mdui-ripple article_tags-link" href="/tags/hexo/" rel="tag">hexo</a>
+        <a class="mdui-ripple article_tags-link" href="/tags/MySQL/" rel="tag">MySQL</a><a class="mdui-ripple article_tags-link" href="/tags/MySQL%E7%B4%A2%E5%BC%95/" rel="tag">MySQL索引</a>
       
     </footer>
     
@@ -292,12 +330,17 @@
 
   <nav id="paginator">
     
-      <a rel="prev" class="extend prev" href="/2020/09/12/Markdown-Demo-%E6%B5%8B%E8%AF%95/">
+      <a rel="prev" class="extend prev" href="/2020/10/23/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602/">
         <button aria-label="prev" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_back</i></button>
-        <span class="mdui-p-x-3" mdui-tooltip="{content: 'Markdown Demo 测试'}">上一篇</span>
+        <span class="mdui-p-x-3" mdui-tooltip="{content: 'MySQL性能优化02：MySQL架构篇'}">上一篇</span>
       </a>
     
     <div class="spacer"></div>
+    
+      <a rel="next" class="extend next" href="/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+        <span class="mdui-p-x-3" mdui-tooltip="{content: 'JMM Java内存模型'}">下一篇</span>
+        <button aria-label="next" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_forward</i></button>
+      </a>
     
   </nav>
 
@@ -313,7 +356,7 @@
     repo: 'Lampkins.github.io',
     owner: 'lampkins',
     admin: ['lampkins'],
-    id: '11a1383a-ce47-9e86-8758-9ea52dd19722' || location.pathname,
+    id: '3dba9781-5350-5b4a-377f-93a91dfeb28e' || location.pathname,
     distractionFreeMode: false
   });
   gitalk.render('gitalk-container');
@@ -325,7 +368,7 @@
   <div style="position: fixed !important; right: 16px; top: 30%;">
     <button class="mdui-fab mdui-fab-mini mdui-ripple" mdui-menu="{target: '#toc'}"><i class="mdui-icon material-icons">toc</i></button>
     <ul class="mdui-menu" id="toc">
-      <li class="mdui-menu-item" disabled><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick%20Start"><span class="toc-text"> Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create%20a%20new%20post"><span class="toc-text"> Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run%20server"><span class="toc-text"> Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate%20static%20files"><span class="toc-text"> Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy%20to%20remote%20sites"><span class="toc-text"> Deploy to remote sites</span></a></li></ol></li></ol></li>
+      <li class="mdui-menu-item" disabled><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E9%A2%98%EF%BC%9A"><span class="toc-text"> 主题：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-text"> 目标</span></a></li></ol></li>
     </ul>
   </div>
 </main>
