@@ -20,13 +20,13 @@
 <meta property="og:description" content="MySQL课程主题和目标 ¶ 主题： 你真的会使用MySQL索引进行性能优化吗?  ¶ 目标   性能分析要从三驾马车开始(慢查询日志、explain执行计划、 show profile )   有了性能分析报告，接下来如何对性能进行优化呢？   我们一定要搞清楚通过explain显示查询计划中关于索引是否被用到 1234-- id是主键-- name是非唯一索引-- MySQL在执行查询时一般只">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-10-23T09:32:30.000Z">
-<meta property="article:modified_time" content="2020-10-23T09:34:03.380Z">
+<meta property="article:modified_time" content="2020-10-30T13:46:51.069Z">
 <meta property="article:author" content="Lampkins">
 <meta property="article:tag" content="MySQL">
-<meta property="article:tag" content="MySQL索引">
+<meta property="article:tag" content="索引">
 <meta name="twitter:card" content="summary">
 
-  <meta name="keywords" content=",MySQL,MySQL索引">
+  <meta name="keywords" content=",MySQL,索引">
   <meta name="format-detection" content="telephone=no,email=no">
   <meta name="theme-color" content="#9C27B0">
 
@@ -68,7 +68,7 @@
     <div class="mdui-toolbar-spacer"></div>
     <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-dialog="{target: '#search'}" mdui-tooltip="{content: '搜索'}"><i class="mdui-icon material-icons">search</i></a>
     <a href="/atom.xml" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: 'RSS'}"><i class="mdui-icon material-icons">rss_feed</i></a>
-    <a id="mode" href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: 'Day/Night'}"><i class="mdui-icon material-icons">brightness_5</i></a>
+    <a id="mode" href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: 'D/N'}"><i class="mdui-icon material-icons">brightness_5</i></a>
   </div>
 </header>
 <div class="mdui-dialog" id="search">
@@ -110,7 +110,7 @@
       </div>
       <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
         
-        <a class="mdui-ripple sidebar_archives-link" href="/archives/2020/10/">十月 2020<span class="mdui-ripple sidebar_archives-count">6</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/09/">九月 2020<span class="mdui-ripple sidebar_archives-count">2</span></a>
+        <a class="mdui-ripple sidebar_archives-link" href="/archives/2020/10/">十月 2020<span class="mdui-ripple sidebar_archives-count">11</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/09/">九月 2020<span class="mdui-ripple sidebar_archives-count">2</span></a>
         
       </div>
     </div>
@@ -122,7 +122,7 @@
       </div>
       <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
         
-        <a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术<span class="mdui-ripple sidebar_archives-count">6</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="mdui-ripple sidebar_archives-count">4</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试<span class="mdui-ripple sidebar_archives-count">2</span></a>
+        <a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术<span class="mdui-ripple sidebar_archives-count">4</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="mdui-ripple sidebar_archives-count">2</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">MySQL性能优化<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试<span class="mdui-ripple sidebar_archives-count">2</span></a>
         
       </div>
     </div>
@@ -134,7 +134,7 @@
       </div>
       <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
         
-        <a class="mdui-ripple sidebar_archives-link" href="/tags/JMM/" rel="tag">JMM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/JVM/" rel="tag">JVM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Java/" rel="tag">Java<span class="mdui-ripple sidebar_archives-count">3</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/MySQL/" rel="tag">MySQL<span class="mdui-ripple sidebar_archives-count">3</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/MySQL%E7%B4%A2%E5%BC%95/" rel="tag">MySQL索引<span class="mdui-ripple sidebar_archives-count">3</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Redis/" rel="tag">Redis<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/hexo/" rel="tag">hexo<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/markdown/" rel="tag">markdown<span class="mdui-ripple sidebar_archives-count">1</span></a>
+        <a class="mdui-ripple sidebar_archives-link" href="/tags/ACID/" rel="tag">ACID<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/JMM/" rel="tag">JMM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/JVM/" rel="tag">JVM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Java/" rel="tag">Java<span class="mdui-ripple sidebar_archives-count">3</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/MySQL/" rel="tag">MySQL<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Redis/" rel="tag">Redis<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/hexo/" rel="tag">hexo<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/markdown/" rel="tag">markdown<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引<span class="mdui-ripple sidebar_archives-count">7</span></a>
         
       </div>
     </div>
@@ -175,7 +175,7 @@
   <style>#main article .mdui-card-content .center-block{display:block!important;margin-right:auto!important;margin-left:auto!important}</style>
   <article class="mdui-card mdui-m-b-5" style="margin-top: -40px !important;">
     <header class="mdui-card-media">
-      <img src="/images/random/material-17.png" style="max-height: 240px;">
+      <img src="/images/random/material-4.png" style="max-height: 240px;">
       <div class="mdui-card-media-covered">
         <div class="mdui-card-primary">
           <div class="mdui-card-primary-title">MySQL性能优化01：主题和目标</div>
@@ -268,13 +268,13 @@
 </ol>
 <hr>
 <blockquote>
-<p><a href>MySQL性能优化01：主题和目标</a></p>
-<p><a href>MySQL性能优化02：MySQL架构篇</a></p>
-<p><a href>MySQL性能优化03：MySQL性能分析篇</a></p>
-<p><a href>MySQL性能优化04：MySQL索引篇01索引讲解</a></p>
-<p><a href>MySQL性能优化05：MySQL索引篇02查看执行计划</a></p>
-<p><a href>MySQL性能优化06：MySQL索引篇03索引失效分析</a></p>
-<p><a href>MySQL性能优化07：性能优化篇</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/">MySQL性能优化01：主题和目标</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602/">MySQL性能优化02：MySQL架构篇</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9603/">MySQL性能优化03：MySQL性能分析篇</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9604/">MySQL性能优化04：MySQL索引篇01索引讲解</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/">MySQL性能优化05：MySQL索引篇02查看执行计划</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9606/">MySQL性能优化06：MySQL索引篇03索引失效分析</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9607/">MySQL性能优化07：性能优化篇</a></p>
 </blockquote>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css">
       
@@ -289,10 +289,10 @@
     </div>
     <footer class="mdui-card-actions">
       
-        <a class="mdui-ripple article_categories-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><a class="mdui-ripple article_categories-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+        <a class="mdui-ripple article_categories-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="mdui-ripple article_categories-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">MySQL性能优化</a>
       
       
-        <a class="mdui-ripple article_tags-link" href="/tags/MySQL/" rel="tag">MySQL</a><a class="mdui-ripple article_tags-link" href="/tags/MySQL%E7%B4%A2%E5%BC%95/" rel="tag">MySQL索引</a>
+        <a class="mdui-ripple article_tags-link" href="/tags/MySQL/" rel="tag">MySQL</a><a class="mdui-ripple article_tags-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a>
       
     </footer>
     
@@ -356,7 +356,7 @@
     repo: 'Lampkins.github.io',
     owner: 'lampkins',
     admin: ['lampkins'],
-    id: '3dba9781-5350-5b4a-377f-93a91dfeb28e' || location.pathname,
+    id: '6465a74d-5386-faca-2d5f-6988c2244af8' || location.pathname,
     distractionFreeMode: false
   });
   gitalk.render('gitalk-container');
@@ -398,7 +398,7 @@
   </div>
   <div class="mdui-p-y-1 mdui-text-center">
     Copyright &copy; 2019 - 2020 Lampkins<br>
-    Powered by <a href="https://hexo.io/" target="_blank" class="mdui-text-color-theme-accent">Hexo</a>
+    Powered by <a href="https://hexo.io/" target="_blank" class="mdui-text-color-theme-accent">Hexo</a>| Theme by <a href="https://github.com/niemingzhao/niemingzhao.github.io/tree/theme" target="_blank" class="mdui-text-color-theme-accent">default</a>
     <br>
       <span id="busuanzi_container_site_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_site_pv"></span></span> &nbsp;&nbsp;
       <span id="busuanzi_container_site_uv" style="display: none;"><i class="iconfont">&#xe601;</i> <span id="busuanzi_value_site_uv"></span></span>

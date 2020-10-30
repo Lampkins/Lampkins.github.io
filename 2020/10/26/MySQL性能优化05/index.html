@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="renderer" content="webkit">
+
+  
+  <title>MySQL性能优化05：MySQL索引篇02 | 博客</title>
+
+  <link rel="shortcut icon" href="/images/favicon.png">
+  <link rel="alternate" href="/atom.xml" title="博客" type="application/atom+xml">
+  <meta name="description" content="MySQL Explain查看执行计划  ¶ MySQL索引篇 ¶ 查看执行计划 ¶ 建表语句 12345678910111213141516171819create table &#96;t_user&#96;(	id int primary key,    name varchar(100),    age int,    sex char(1),    address varchar(100">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL性能优化05：MySQL索引篇02">
+<meta property="og:url" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/index.html">
+<meta property="og:site_name" content="博客">
+<meta property="og:description" content="MySQL Explain查看执行计划  ¶ MySQL索引篇 ¶ 查看执行计划 ¶ 建表语句 12345678910111213141516171819create table &#96;t_user&#96;(	id int primary key,    name varchar(100),    age int,    sex char(1),    address varchar(100">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026191651069.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026213444613.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026213859278.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026215912949.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026220120799.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026220518282.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026212335944.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026223046115.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026224833233.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026225113693.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026230102618.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026230433113.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026230703647.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026234200534.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026232248331.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026233925768.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026233756102.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026234323326.png">
+<meta property="article:published_time" content="2020-10-26T12:57:34.000Z">
+<meta property="article:modified_time" content="2020-10-30T13:48:43.154Z">
+<meta property="article:author" content="Lampkins">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="索引">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026191651069.png">
+
+  <meta name="keywords" content=",MySQL,索引">
+  <meta name="format-detection" content="telephone=no,email=no">
+  <meta name="theme-color" content="#9C27B0">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="博客">
+  <meta name="msapplication-starturl" content="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/">
+  <meta name="msapplication-navbutton-color" content="#9C27B0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="博客">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="/images/favicon.png">
+
+  
+    <link rel="canonical" href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/">
+  
+
+  
+  
+
+  
+  
+  
+
+  
+<link rel="stylesheet" href="/css/mdui.css">
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/custom.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="mdui-appbar-with-toolbar mdui-theme-primary-blue-grey mdui-theme-accent-blue">
+  <script>var a=localStorage.getItem("mdui-theme-layout-dark");if(a){document.getElementsByTagName("body")[0].className+=" mdui-theme-layout-dark"};</script>
+  <script>var a=localStorage.getItem("mdui-drawer-close");if(!a){document.getElementsByTagName("body")[0].className+=" mdui-drawer-body-left"};</script>
+  <header id="header" class="mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-hide mdui-appbar-inset">
+  <div class="mdui-toolbar mdui-color-theme">
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#sidebar', swipe: true}"><i class="mdui-icon material-icons">menu</i></a>
+    <a href="/" class="mdui-typo-headline">博客</a>
+    <div class="mdui-toolbar-spacer"></div>
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-dialog="{target: '#search'}" mdui-tooltip="{content: '搜索'}"><i class="mdui-icon material-icons">search</i></a>
+    <a href="/atom.xml" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: 'RSS'}"><i class="mdui-icon material-icons">rss_feed</i></a>
+    <a id="mode" href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: 'D/N'}"><i class="mdui-icon material-icons">brightness_5</i></a>
+  </div>
+</header>
+<div class="mdui-dialog" id="search">
+  
+    <div class="search-form">
+      <input type="search" class="search-form-input" placeholder="请输入关键字">
+    </div>
+    <div class="search-result" data-resource="/search.xml"></div>
+  
+</div>
+  <aside id="sidebar" class="mdui-drawer mdui-drawer-full-height mdui-shadow-3">
+  <script>var a=localStorage.getItem("mdui-drawer-close");if(a){document.getElementById("sidebar").className+=" mdui-drawer-close"};</script>
+  <div class="mdui-grid-tile">
+    <img src="/images/banner1.jpg" style="height: auto;">
+    <img src="/images/avatar1.jpg" class="avatar-animation" style="position: absolute; top: 10%; left: 24px; width: 64px; height: 64px; border: 2px solid #fff; border-radius: 50%;">
+    <div class="mdui-grid-tile-actions">
+      <div class="mdui-grid-tile-text">
+        <div class="mdui-grid-tile-title">Lampkins</div>
+        <div class="mdui-grid-tile-subtitle"><i class="mdui-icon material-icons">art_track</i>Creator by ❤️</div>
+      </div>
+      
+        <div class="mdui-grid-tile-buttons">
+          <a href="mailto:arivins_lau@foxmail.com" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: 'arivins_lau@foxmail.com'}"><i class="mdui-icon material-icons">email</i></a>
+        </div>
+      
+    </div>
+  </div>
+
+  <div class="mdui-list" mdui-collapse="{accordion: true}">
+    <a href="/" class="mdui-list-item mdui-ripple">
+      <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-blue">home</i>
+      <div class="mdui-list-item-content">主页</div>
+    </a>
+    <div class="mdui-collapse-item">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-deep-orange">archive</i>
+        <div class="mdui-list-item-content">归档</div>
+        <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
+        
+        <a class="mdui-ripple sidebar_archives-link" href="/archives/2020/10/">十月 2020<span class="mdui-ripple sidebar_archives-count">11</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/09/">九月 2020<span class="mdui-ripple sidebar_archives-count">2</span></a>
+        
+      </div>
+    </div>
+    <div class="mdui-collapse-item">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-green">class</i>
+        <div class="mdui-list-item-content">分类</div>
+        <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
+        
+        <a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术<span class="mdui-ripple sidebar_archives-count">4</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="mdui-ripple sidebar_archives-count">2</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">MySQL性能优化<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试<span class="mdui-ripple sidebar_archives-count">2</span></a>
+        
+      </div>
+    </div>
+    <div class="mdui-collapse-item">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-brown">bookmark</i>
+        <div class="mdui-list-item-content">标签</div>
+        <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
+        
+        <a class="mdui-ripple sidebar_archives-link" href="/tags/ACID/" rel="tag">ACID<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/JMM/" rel="tag">JMM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/JVM/" rel="tag">JVM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Java/" rel="tag">Java<span class="mdui-ripple sidebar_archives-count">3</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/MySQL/" rel="tag">MySQL<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Redis/" rel="tag">Redis<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/hexo/" rel="tag">hexo<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/markdown/" rel="tag">markdown<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引<span class="mdui-ripple sidebar_archives-count">7</span></a>
+        
+      </div>
+    </div>
+    <a href="/about" class="mdui-list-item mdui-ripple">
+      <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-purple">person</i>
+      <div class="mdui-list-item-content">关于</div>
+    </a>
+  </div>
+
+  <div class="mdui-divider"></div>
+
+  <div class="mdui-list" mdui-collapse="{accordion: true}">
+    
+      <a href="/tagcloud" class="mdui-list-item mdui-ripple">标签云</a>
+    
+      <a href="/gallery" class="mdui-list-item mdui-ripple">画廊</a>
+    
+    <div class="mdui-collapse-item">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <div class="mdui-list-item-content">友情链接</div>
+        <i class="mdui-list-item-icon mdui-icon material-icons">link</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
+        
+          <a href="https://imgchr.com/3312862586" target="_blank" class="mdui-list-item mdui-p-l-2 mdui-text-color-theme-accent mdui-ripple" style="justify-content: center;">路过图床</a>
+        
+          <a href="https://github.com/niemingzhao/niemingzhao.github.io/tree/theme" target="_blank" class="mdui-list-item mdui-p-l-2 mdui-text-color-theme-accent mdui-ripple" style="justify-content: center;">博客主题</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</aside>
+  <main id="main" class="mdui-m-t-5 fadeIn animated">
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  <style>#main article .mdui-card-content .center-block{display:block!important;margin-right:auto!important;margin-left:auto!important}</style>
+  <article class="mdui-card mdui-m-b-5" style="margin-top: -40px !important;">
+    <header class="mdui-card-media">
+      <img src="/images/random/material-18.png" style="max-height: 240px;">
+      <div class="mdui-card-media-covered">
+        <div class="mdui-card-primary">
+          <div class="mdui-card-primary-title">MySQL性能优化05：MySQL索引篇02</div>
+          <div class="mdui-card-primary-subtitle"><i class="iconfont">&#xe697;</i> 2020-10-26 / <i class="iconfont">&#xe601;</i> Lampkins &nbsp;&nbsp; <span id="busuanzi_container_page_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_page_pv"></span></span></div>
+        </div>
+      </div>
+      <div class="mdui-card-menu">
+        
+          <button class="mdui-btn mdui-btn-icon mdui-text-color-white" mdui-menu="{target: '#qrcode', align: 'right'}"><i class="mdui-icon material-icons">devices</i></button>
+          <ul class="mdui-menu" id="qrcode">
+            
+              <li class="mdui-menu-item"><a class="mdui-text-center mdui-ripple">发送到手机</a></li>
+            
+            <li class="mdui-menu-item" disabled>
+              
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAAC3ElEQVR42u3aS27cMBAFwLn/pZ1tACPKe005kcjiyhhrRBZn0ejP5+vI9cHGxsbGxsbGxsZ+JPsTr+/P//7JX7b89syfvnW91+zM2NjY2Cew20NfX0F0iOBak6spLhobGxv7APb1UX4iwCRXlp/hOqxiY2NjY1+HrvzJHNamK9jY2NjYLTv/b1tUenQAw8bGxn4wOynQ5FvOmgo59Z/W0rCxsbEfz25LP0/4+z/0t7GxsbEfyV5f+dXkTYU2xEbnxMbGxt6UnacHeSm/HbVpC0zDUhc2Njb2puwEuZIAJG9OAlWOHKYi2NjY2K9lt2X6lWRj/flZkQsbGxt7b/ZKqzUfl5mlJbOEZ1hLw8bGxt6InSQeOb4d8ZmN5kdhEhsbG/tI9uyC2mZAwm6DGTY2NvZp7PXg1IbAtjz0I8OX2NjY2FuwZ22A/CLWC0y3JTDY2NjYm7Lbxup6ub9NPPLvYmNjY5/MHpZpRqX/WYs3+Rluy8CwsbGxX8VuE4y2WH/XZeUtimEGho2Njf1adv6iHDlrKsz2+ooXNjY29jnslSRkJclZGdmJylvY2NjYm7LbocmksTorTs1Gc4rQi42Njb0pO994pYnblv7b9OOGmVNsbGzs17JvCw9lKze/9FnZq0hFsLGxsV/Onm0/HH9cCG/5vnWjFxsbG3tT9l2MvMGQNx6wsbGxsfNyTN6CbYtKs0Gf/ITY2NjY57CToNIO4rRFpTwsrSxsbGzsXdn5CM5KEErShrwtkYc0bGxs7BPYdRgoCzrRMM2o2VAHXWxsbOxN2Z94tSlKe9C8wTBrIWBjY2Pvza6bpqNw0o7srLSfowCGjY2NvR17NoIza9Dm19GG2DqAYWNjYx/JXikYtcWju96PjY2Njd02fZOraZOTdl9sbGzs09izJusstORlqfbKikYvNjY29kbs2WjjrMTTAvIiVx3AsLGxsbdgn7OwsbGxsbGxsbGxH7N+AbpoSUucMq9bAAAAAElFTkSuQmCC">
+              
+            </li>
+          </ul>
+        
+        
+          <button class="mdui-btn mdui-btn-icon mdui-text-color-white" mdui-menu="{target: '#share_menu', align: 'right'}"><i class="mdui-icon material-icons">share</i></button>
+          <ul class="mdui-menu" id="share_menu">
+            <li class="mdui-menu-item">
+              <a href="http://service.weibo.com/share/share.php?appkey=&title=MySQL性能优化05：MySQL索引篇02&url=http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/&pic=http://lampkins.gitee.io/images/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="https://twitter.com/intent/tweet?text=MySQL性能优化05：MySQL索引篇02&url=http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/&via=Lampkins" target="_blank" class="mdui-ripple">分享到 Twitter</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="https://www.facebook.com/sharer/sharer.php?u=http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="https://plus.google.com/share?url=http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/" target="_blank" class="mdui-ripple">分享到 Google+</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/&title=MySQL性能优化05：MySQL索引篇02" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="http://connect.qq.com/widget/shareqq/index.html?site=博客&title=MySQL性能优化05：MySQL索引篇02&pics=http://lampkins.gitee.io/images/favicon.png&url=http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/" target="_blank" class="mdui-ripple">分享到 QQ</a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="https://telegram.me/share/url?url=http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/&text=MySQL性能优化05：MySQL索引篇02" target="_blank" class="mdui-ripple">分享到 Telegram</a>
+            </li>
+          </ul>
+        
+      </div>
+    </header>
+    <div class="mdui-card-content mdui-typo">
+      <p>MySQL Explain查看执行计划</p>
+<hr>
+<h1 id="MySQL%E7%B4%A2%E5%BC%95%E7%AF%87"><a class="header-anchor" href="#MySQL%E7%B4%A2%E5%BC%95%E7%AF%87">¶</a> MySQL索引篇</h1>
+<h2 id="%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92"><a class="header-anchor" href="#%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92">¶</a> 查看执行计划</h2>
+<h3 id="%E5%BB%BA%E8%A1%A8%E8%AF%AD%E5%8F%A5"><a class="header-anchor" href="#%E5%BB%BA%E8%A1%A8%E8%AF%AD%E5%8F%A5">¶</a> 建表语句</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">create table &#96;t_user&#96;(</span><br><span class="line">	id int primary key,</span><br><span class="line">    name varchar(100),</span><br><span class="line">    age int,</span><br><span class="line">    sex char(1),</span><br><span class="line">    address varchar(100)</span><br><span class="line">);</span><br><span class="line">create table &#96;t_user_role&#96; (</span><br><span class="line">    uid int,</span><br><span class="line">    rid int</span><br><span class="line">);</span><br><span class="line">alter table &#96;t_user&#96; add index idx_name_age(name(10), age);</span><br><span class="line">alter table &#96;t_user&#96; add index idx_sex(sex);</span><br><span class="line"></span><br><span class="line">insert into &#96;t_user&#96;(id,name,age,sex,address) values(1, &#39;zhangsan&#39;, 20, &#39;0&#39;, &#39;成都&#39;);</span><br><span class="line">insert into &#96;t_user&#96;(id,name,age,sex,address) values(2, &#39;lisi&#39;, 30, &#39;0&#39;, &#39;成都&#39;);</span><br><span class="line">insert into &#96;t_user&#96;(id,name,age,sex,address) values(3, &#39;lihong&#39;, 25, &#39;1&#39;, &#39;成都&#39;);</span><br><span class="line"></span><br><span class="line">insert into &#96;t_user_role&#96;(uid, rid) values(1, 1);</span><br></pre></td></tr></table></figure>
+<p>特别说明：</p>
+<p><mark>name列的长度是varchar(100)，但是创建索引的时候，指定的长度却是10，这是使用了<a target="_blank" rel="noopener" href="https://blog.csdn.net/ma2595162349/article/details/79449493"><strong>前缀索引</strong></a>这个概念。</mark></p>
+<h3 id="%E4%BB%8B%E7%BB%8D"><a class="header-anchor" href="#%E4%BB%8B%E7%BB%8D">¶</a> 介绍</h3>
+<p>使用explain这个命令来查看一个这些SQL语句的执行计划，查看该SQL语句有没有使用上了索引，有没有做全表扫描，这都可以通过explain命令来查看。</p>
+<p>EXPLAIN命令用法十分简单，在SELECT语句前加上explain就可以了，例如:</p>
+<h3 id="%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><a class="header-anchor" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E">¶</a> 参数说明</h3>
+<p>EXPLAIN命令的输出内容大致如下：</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026191651069.png" alt="image-20201026191651069"></p>
+<p>各列的含义如下：</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th style="text-align:center">JSON Name</th>
+<th style="text-align:center">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td style="text-align:center">select_id</td>
+<td style="text-align:center">SELECT 查询的标识符，每个SELECT都会自动分配一个唯一的标识符</td>
+</tr>
+<tr>
+<td><strong>select_type</strong></td>
+<td style="text-align:center">None</td>
+<td style="text-align:center">SELECT 查询的类型</td>
+</tr>
+<tr>
+<td>table</td>
+<td style="text-align:center">table_name</td>
+<td style="text-align:center">查询的是哪个表</td>
+</tr>
+<tr>
+<td>partitions</td>
+<td style="text-align:center">partitions</td>
+<td style="text-align:center">匹配的分区</td>
+</tr>
+<tr>
+<td><strong>type</strong></td>
+<td style="text-align:center">access_type</td>
+<td style="text-align:center">join类型</td>
+</tr>
+<tr>
+<td>possible_keys</td>
+<td style="text-align:center">possible_keys</td>
+<td style="text-align:center">此次查询中可能选用的索引</td>
+</tr>
+<tr>
+<td>key</td>
+<td style="text-align:center">key</td>
+<td style="text-align:center">此次查询中确切使用到的索引</td>
+</tr>
+<tr>
+<td>key_len</td>
+<td style="text-align:center">key_length</td>
+<td style="text-align:center">用于处理查询的索引长度</td>
+</tr>
+<tr>
+<td>ref</td>
+<td style="text-align:center">ref</td>
+<td style="text-align:center">哪个字段或常数与key一起被使用</td>
+</tr>
+<tr>
+<td>rows</td>
+<td style="text-align:center">rows</td>
+<td style="text-align:center">显示此查询一共扫描了多少行，这个是一个估计值</td>
+</tr>
+<tr>
+<td>filtered</td>
+<td style="text-align:center">filtered</td>
+<td style="text-align:center">表示此查询条件所过滤的数据的百分比</td>
+</tr>
+<tr>
+<td><strong>extra</strong></td>
+<td style="text-align:center">None</td>
+<td style="text-align:center">额外的信息</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1.%20id"><a class="header-anchor" href="#1.%20id">¶</a> 1. id</h4>
+<p>每个单位查询的SELECT语句都会自动分配的一个唯一标识符，表示查询中操作表的顺序，有四种情况：</p>
+<ul>
+<li>id相同：执行顺序由上到下</li>
+<li>id不同：如果是子查询, id号会自增, id越大,优先级越高。</li>
+<li>id相同的不同的同时存在</li>
+<li>id列为null的就表示这是一个结果集,不需要使用它来进行查询。</li>
+</ul>
+<h4 id="2.%20select_type(%E9%87%8D%E8%A6%81)"><a class="header-anchor" href="#2.%20select_type(%E9%87%8D%E8%A6%81)">¶</a> 2. select_type(重要)</h4>
+<p>单位查询的查询类型，比如：普通查询、联合查询(union、union all)、 子查询等复杂查询。</p>
+<table>
+<thead>
+<tr>
+<th>select_type Value</th>
+<th style="text-align:center">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIMPLE</td>
+<td style="text-align:center">Simple SELECT (not using UNION or subqueries)</td>
+</tr>
+<tr>
+<td>PRIMARY</td>
+<td style="text-align:center">Outermost SELECT</td>
+</tr>
+<tr>
+<td>UNION</td>
+<td style="text-align:center">Second or later SELECT statement in a UNION</td>
+</tr>
+<tr>
+<td>DEPENDENT UNION</td>
+<td style="text-align:center">Second or later SELECT statement in a UNION, dependent on outer query</td>
+</tr>
+<tr>
+<td>UNION RESULT</td>
+<td style="text-align:center">Result of a UNION.</td>
+</tr>
+<tr>
+<td>SUBQUERY</td>
+<td style="text-align:center">First SELECT in subquery</td>
+</tr>
+<tr>
+<td>DEPENDENT SUBQUERY</td>
+<td style="text-align:center">First SELECT in subquery, dependent on outer query</td>
+</tr>
+<tr>
+<td>DERIVED</td>
+<td style="text-align:center">Derived table SELECT (subquery in FROM clause)</td>
+</tr>
+<tr>
+<td>MATERIALIZED</td>
+<td style="text-align:center">Materialized subquery</td>
+</tr>
+<tr>
+<td>UNCACHEABLE SUBQUERY</td>
+<td style="text-align:center">A subquery for which the result cannot be cached and must be re-evaluated for each row of the outer query</td>
+</tr>
+<tr>
+<td>UNCACHEABLE UNION</td>
+<td style="text-align:center">The second or later select in a UNION that belongs to an uncacheable subquery (see UNCACHEABLE SUBQUERY)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>simple</strong></p>
+<p>​		表示不需要union操作或者不包含子查询的简单select查询。有连接查询时，外层的查询为simple，且只有一个。</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026213444613.png" alt="image-20201026213444613"></p>
+<p><strong>primary</strong></p>
+<p>​		一个需要union操作或者含有子查询的select，位于最外层的单位查询的select_ type即为primary，且只有一个。</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026213859278.png" alt="image-20201026213859278"></p>
+<p><strong>union</strong></p>
+<p>​		union连接的两个select查询，第一个查询是dervied派生表，除了第一个表外,第二个及以后的表都是union。</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026215912949.png" alt="image-20201026215912949"></p>
+<p><strong>dependent union</strong></p>
+<p>​		与union一样，出现在union或union all语句中，但是这个查询要受到外部查询的影响。</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026220120799.png" alt="image-20201026220120799"></p>
+<p><strong>union result</strong></p>
+<p>​		包含union的结果集，在union和union all语句中，因为它不需要参与查询，所以id字段为null。</p>
+<p><strong>subquery</strong></p>
+<p>​		除了from字句中包含的子查询外，其他地方出现的子查询都可能是subquery。</p>
+<p><strong>dependent subquery</strong></p>
+<p>​		与dependent union类似，表示这个subquery的查询要受到外部表查询的影响。</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026220518282.png" alt="image-20201026220518282"></p>
+<p><strong>derived</strong></p>
+<p>​		from字句中出现的子查询，也叫做派生表，其他数据库中可能叫做内联视图或嵌套select。</p>
+<h4 id="3.%20table"><a class="header-anchor" href="#3.%20table">¶</a> 3. table</h4>
+<p>显示的单位查询的表名，有如下几种情况:</p>
+<ul>
+<li>如果查询使用了别名，那么这里显示的是别名</li>
+<li>如果不涉及对数据表的操作，那么这显示为null</li>
+<li>如果显示为尖括号括起来的<code>&lt;derived N&gt;</code>就表示这个是临时表，N就是执行计划中的id，表示结果来自于这个查询产生。</li>
+<li>如果是尖括号括起来的<code>&lt;union M,N&gt;</code>，其也是一个临时表，表示这个结果来自于union查询的id为M, N的结果集。</li>
+<li><code>&lt;subquery N&gt;</code>，表示子查询结果被物化。</li>
+</ul>
+<h4 id="4.type(%E9%87%8D%E8%A6%81)"><a class="header-anchor" href="#4.type(%E9%87%8D%E8%A6%81)">¶</a> 4.type(重要)</h4>
+<p>显示的是单位查询的连接类型或者理解为访问类型,访问性能依次从好到差：</p>
+<p><mark>system、const、eq_ref、ref、fulltext、ref_or_nu11、unique_、subquery、index_ subquery、range、index_merge、index、ALL</mark></p>
+<blockquote>
+<p>注意：</p>
+</blockquote>
+<ul>
+<li>除了all之外，其他的type都可以使用到索引</li>
+<li>除了index_ merge之外，其他的type只可以用到一个索引</li>
+<li>最差要使用到range级别</li>
+</ul>
+<p><strong>system</strong></p>
+<p>​		表中只有一行数据或者是空表。</p>
+<p><strong>const (重要)</strong></p>
+<p>​		使用唯一索引或者主键，返回记录定是1行记录的等值where条件时 ，通常type是const。其他数据库也叫做唯一。</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026212335944.png" alt="image-20201026212335944"></p>
+<p><strong>eq_ref (重要)</strong></p>
+<p>​		<strong>针对唯一性索引</strong>此类型通常出现在多表的join 查询，表示对于前表的每一个结果，都只能匹配到后表的一行结果，并且查询的比较操作通常是<code>=</code>，查询效率较高。</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026223046115.png" alt="image-20201026223046115"></p>
+<p><strong>ref (重要)</strong></p>
+<p>​		<strong>针对非唯一性索引</strong>，使用等值( = )查询。或者是使用了最左前缀规则索引的查询。</p>
+<ul>
+<li>组合索引</li>
+</ul>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026224833233.png" alt="image-20201026224833233"></p>
+<ul>
+<li>非唯一索引</li>
+</ul>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026225113693.png" alt="image-20201026225113693"></p>
+<p><strong>fulltext</strong></p>
+<p>​		全文索引检索，要注意，全文索引的优先级很高，若全文索引和普通索引同时存在时，mysql不管代价，优先选择使用全文索引。</p>
+<p><strong>ref_or_null</strong></p>
+<p>​		与ref方法类似，只是增加了null值的比较，实际用的不多。</p>
+<p><strong>unique_ subquery</strong></p>
+<p>​		用于where中的in形式子查询，子查询返回不重复值唯一值</p>
+<p><strong>index_ subquery</strong></p>
+<p>​		用于in形式子查询使用到了辅助索引或者in常数列表，子查询可能返回重复值，可以使用索引将子查询去重。</p>
+<p><strong>range (重要)</strong></p>
+<p>​		<strong>索引范围扫描</strong>，常见于使用&gt;,&lt;,is null, between ,in ,like等运算符的查询中。</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026230102618.png" alt="image-20201026230102618"></p>
+<p><strong>index_ merge</strong></p>
+<p>​		表示查询使用了两个以上的索引，最后取交集或者并集，常见and , or的条件使用了不同的索引，官方排序这个在ref_or_null之后,但是实际上由于要读取所个索引，性能可能大部分时间都不如range<br>
+<strong>index (重要)</strong></p>
+<p>​		select结果列中使用到了索引，type会显示为index。</p>
+<p>​		<strong>索引扫描</strong>，把索引从头到尾扫一遍，常见于使用索引列就可以处理不需要读取数据文件的查询、可以使用索引排序或者分组的查询。<mark>索引覆盖</mark></p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026230433113.png" alt="image-20201026230433113"></p>
+<p><strong>all (重要)</strong></p>
+<p>​		这个就是全表扫描数据文件，然后再在server层进行过滤返回符合要求的记录。</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026230703647.png" alt="image-20201026230703647"></p>
+<h4 id="5.%20possible_keys"><a class="header-anchor" href="#5.%20possible_keys">¶</a> 5. possible_keys</h4>
+<p>此次查询可能选用的索引，一个或多个</p>
+<h4 id="6.%20key"><a class="header-anchor" href="#6.%20key">¶</a> 6. key</h4>
+<p>查询真正使用到的索引, select_type为index_merge时 ,这里可能出现两个以上的索引，其他的select_type这里只会出现一个。</p>
+<h4 id="7.%20key_len"><a class="header-anchor" href="#7.%20key_len">¶</a> 7. key_len</h4>
+<ul>
+<li>用于处理查询的索引长度，如果是单列索引,那就整个索引长度算进去，如果是多列索引，那么查询不一定都能使用到所有的列，具体使用到了多少个列的索引，这里就会计算进去，没有使用到的列，这里不会计算进去。</li>
+<li>留意下这个列的值，算一下你的多列索引总长度就知道有没有使用到所有的列了。</li>
+<li>另外, key_len只计算where条件用到的索引长度，而排序和分组就算用到了索引，也不会计算到key_len中。</li>
+</ul>
+<h4 id="8.%20ref"><a class="header-anchor" href="#8.%20ref">¶</a> 8. ref</h4>
+<ul>
+<li>如果是使用的常数等值查询,这里会显示const</li>
+<li>如果是连接查询，被驱动表的执行计划这里会显示驱动表的关联字段</li>
+<li>如果是条件使用了表达式或者函数,或者条件列发生了内部隐式转换，这里可能显示为func</li>
+</ul>
+<h4 id="9.%20rows"><a class="header-anchor" href="#9.%20rows">¶</a> 9. rows</h4>
+<p>这里是执行计划中估算的扫描行数,不是精确值（InnoDB不是精确的值，MyISAM是精确的值，主要原因是InnoDB里面使用了MVCC并发机制）。</p>
+<h4 id="10.%20extra(%E9%87%8D%E8%A6%81)"><a class="header-anchor" href="#10.%20extra(%E9%87%8D%E8%A6%81)">¶</a> 10. extra(重要)</h4>
+<p>这个列包含不适合在其他列中显示单十分重要的额外的信息，这个列可以显示的信息非常多, 有几十种。</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026234200534.png" alt="image-20201026234200534"></p>
+<p><strong>using index (重要)</strong></p>
+<p>​	查询时<mark>不需要回表查询，直接通过索引就可以获取查询的结果数据</mark>。</p>
+<ul>
+<li>表示相应的SELECT查询中使用到了<strong>覆盖索引( Covering Index )</strong> ，避免访问表的数据行，效率不错!</li>
+<li>如果同时出现Using Where， 说明索引被用来执行查找索引键值</li>
+<li>如果没有同时出现Using Where表明索引用来读取数据而非执行查找动作。</li>
+</ul>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026232248331.png" alt="image-20201026232248331"></p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026233925768.png" alt="image-20201026233925768"></p>
+<p><strong>using where (重要)</strong></p>
+<p>​	表示MySQL将对storage engine提取的结果进行过滤，过滤条件字段无索引</p>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026233756102.png" alt="image-20201026233756102"></p>
+<p><strong>using index condition(重要 )</strong></p>
+<p>​	Using index condition 会先条件过滤索引,过滤完索弓后找到所有符合索引|条件的数据行,随后用WHERE子句中的其他条件去过滤这些数据行;<br>
+<strong>using filesort (重要)</strong></p>
+<ul>
+<li>排序时无法使用到索引时,就会出现这个。常见于order by和group by语句中.</li>
+<li>说明MySQL会使用一 一个外部的索引排序,而不是按照索引顺序进行读取。</li>
+<li>MySQL 中无法利用索引|完成的排序操作称为&quot;文件排序”</li>
+</ul>
+<p><img src="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/image-20201026234323326.png" alt="image-20201026234323326"></p>
+<hr>
+<blockquote>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601/">MySQL性能优化01：主题和目标</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602/">MySQL性能优化02：MySQL架构篇</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9603/">MySQL性能优化03：MySQL性能分析篇</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9604/">MySQL性能优化04：MySQL索引篇01索引讲解</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/">MySQL性能优化05：MySQL索引篇02查看执行计划</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9606/">MySQL性能优化06：MySQL索引篇03索引失效分析</a></p>
+<p><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9607/">MySQL性能优化07：性能优化篇</a></p>
+</blockquote>
+<script>
+    let imgs = document.getElementsByTagName('img');
+    for (let img of imgs) {
+        img.setAttribute('class', 'fancybox');
+    }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css">
+      
+        <div class="mdui-m-y-2 mdui-text-center">
+          <button class="mdui-fab mdui-color-deep-orange mdui-text-color-white mdui-ripple" mdui-dialog="{target: '#donate'}" mdui-tooltip="{content: '打赏', position: 'top'}"><i class="mdui-icon material-icons">thumb_up</i></button>
+        </div>
+      
+      <blockquote>
+        
+        <strong>本文链接：</strong><br><a href="http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/">http://lampkins.gitee.io/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9605/</a>
+      </blockquote>
+    </div>
+    <footer class="mdui-card-actions">
+      
+        <a class="mdui-ripple article_categories-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="mdui-ripple article_categories-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">MySQL性能优化</a>
+      
+      
+        <a class="mdui-ripple article_tags-link" href="/tags/MySQL/" rel="tag">MySQL</a><a class="mdui-ripple article_tags-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a>
+      
+    </footer>
+    
+      <div class="mdui-dialog" id="donate">
+        <div class="mdui-tab mdui-tab-centered">
+          
+            <a href="#donate-0" class="mdui-ripple">QQ支付</a>
+          
+            <a href="#donate-1" class="mdui-ripple">支付宝</a>
+          
+        </div>
+        
+        
+          <div id="donate-0" class="mdui-p-a-2 mdui-typo mdui-text-center">
+            
+              <img src="/images/qqpay.jpg" style="width: 300px;">
+            
+          </div>
+        
+          <div id="donate-1" class="mdui-p-a-2 mdui-typo mdui-text-center">
+            
+              <img src="/images/alipay.jpg" style="width: 300px;">
+            
+          </div>
+        
+      </div>
+    
+  </article>
+  
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+  <script>$("#main article .mdui-card-content img.fancybox").on("click",function(e){$.fancybox.open({src:$(this).attr("src")});});</script>
+
+
+  <nav id="paginator">
+    
+      <a rel="prev" class="extend prev" href="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9606/">
+        <button aria-label="prev" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_back</i></button>
+        <span class="mdui-p-x-3" mdui-tooltip="{content: 'MySQL性能优化06：MySQL索引篇03'}">上一篇</span>
+      </a>
+    
+    <div class="spacer"></div>
+    
+      <a rel="next" class="extend next" href="/2020/10/26/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9604/">
+        <span class="mdui-p-x-3" mdui-tooltip="{content: 'MySQL性能优化04：MySQL索引篇01'}">下一篇</span>
+        <button aria-label="next" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_forward</i></button>
+      </a>
+    
+  </nav>
+
+
+  <div id="comment" class="mdui-m-t-5 mdui-m-x-1">
+    <div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+  var gitalk = new Gitalk({
+    clientID: 'd17f668bcd7f140d735f',
+    clientSecret: '3058f2300347db4f27a87d10648565e8d0549033',
+    repo: 'Lampkins.github.io',
+    owner: 'lampkins',
+    admin: ['lampkins'],
+    id: 'e6024653-d1f8-e3d2-0f03-fd03db9464a9' || location.pathname,
+    distractionFreeMode: false
+  });
+  gitalk.render('gitalk-container');
+</script>
+  </div>
+
+
+
+  <div style="position: fixed !important; right: 16px; top: 30%;">
+    <button class="mdui-fab mdui-fab-mini mdui-ripple" mdui-menu="{target: '#toc'}"><i class="mdui-icon material-icons">toc</i></button>
+    <ul class="mdui-menu" id="toc">
+      <li class="mdui-menu-item" disabled><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL%E7%B4%A2%E5%BC%95%E7%AF%87"><span class="toc-text"> MySQL索引篇</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92"><span class="toc-text"> 查看执行计划</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E8%A1%A8%E8%AF%AD%E5%8F%A5"><span class="toc-text"> 建表语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-text"> 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-text"> 参数说明</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1.%20id"><span class="toc-text"> 1. id</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2.%20select_type(%E9%87%8D%E8%A6%81)"><span class="toc-text"> 2. select_type(重要)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3.%20table"><span class="toc-text"> 3. table</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4.type(%E9%87%8D%E8%A6%81)"><span class="toc-text"> 4.type(重要)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5.%20possible_keys"><span class="toc-text"> 5. possible_keys</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6.%20key"><span class="toc-text"> 6. key</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7.%20key_len"><span class="toc-text"> 7. key_len</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8.%20ref"><span class="toc-text"> 8. ref</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9.%20rows"><span class="toc-text"> 9. rows</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10.%20extra(%E9%87%8D%E8%A6%81)"><span class="toc-text"> 10. extra(重要)</span></a></li></ol></li></ol></li></ol></li></ol></li>
+    </ul>
+  </div>
+</main>
+  <footer id="footer" class="mdui-m-t-5 mdui-p-y-3 mdui-color-theme">
+  <div class="mdui-p-y-0 mdui-text-center">
+    
+      <a href="https://github.com/Lampkins" target="_blank" class="mdui-btn mdui-btn-icon mdui-text-color-theme-a100"><i class="mdui-icon iconfont">&#xe7ab;</i></a>
+    
+    
+      <a href="https://gitee.com/lampkins" target="_blank" class="mdui-btn mdui-btn-icon mdui-text-color-theme-a100"><i class="mdui-icon iconfont1">&#xe686;</i></a>
+    
+    
+    
+    
+    
+    
+      <a href="https://www.instagram.com/arimis0" target="_blank" class="mdui-btn mdui-btn-icon mdui-text-color-theme-a100"><i class="mdui-icon iconfont1">&#xe736;</i></a>
+    
+    
+    
+    
+    
+    
+      <a href="https://qm.qq.com/cgi-bin/qm/qr?k=g3rAKPWjqKBJ7oezteErpQGrtxISDNmp&noverify=0" target="_blank" class="mdui-btn mdui-btn-icon mdui-text-color-theme-a100"><i class="mdui-icon iconfont">&#xe651;</i></a>
+    
+    
+  </div>
+  <div class="mdui-p-y-1 mdui-text-center">
+    Copyright &copy; 2019 - 2020 Lampkins<br>
+    Powered by <a href="https://hexo.io/" target="_blank" class="mdui-text-color-theme-accent">Hexo</a>| Theme by <a href="https://github.com/niemingzhao/niemingzhao.github.io/tree/theme" target="_blank" class="mdui-text-color-theme-accent">default</a>
+    <br>
+      <span id="busuanzi_container_site_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_site_pv"></span></span> &nbsp;&nbsp;
+      <span id="busuanzi_container_site_uv" style="display: none;"><i class="iconfont">&#xe601;</i> <span id="busuanzi_value_site_uv"></span></span>
+    
+  </div>
+</footer>
+  <button id="gotop" class="mdui-fab mdui-fab-fixed mdui-fab-hide mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_upward</i></button>
+  <script async src="http://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+<script src="/js/mdui.js"></script>
+<script src="/js/script.js"></script>
+
+  
+<script src="/custom.js"></script>
+
+</body>
+</html>
