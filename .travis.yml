@@ -1,0 +1,33 @@
+language: node_js # 设置语言
+node_js: stable # 设置语言版本
+
+cache:
+  directories:
+    - node_modules # 缓存依赖
+
+# S: Build Lifecycle
+install:
+  - npm install -g hexo-cli
+  - npm install
+
+
+#before_script:
+ # - npm install -g gulp
+
+script:
+  - hexo clean
+  - hexo generate
+  - hexo deploy
+
+after_script:
+  - git config user.name "Lampkins"
+  - git config user.email "1726538752@qq.com"
+  - sed -i "s~git@github.com:~https://${GH_TOKEN}@github.com/~" _config.yml
+# E: Build LifeCycle
+
+branches:
+  only:
+    - hexo-source
+env:
+ global:
+   - GH_REF: github.com/Lampkins/Lampkins.github.io.git
