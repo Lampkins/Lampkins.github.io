@@ -22,7 +22,6 @@ before_script:
 script:
   - hexo clean # 清空原public
   - hexo generate # 生成public
-  - echo ${ENV_TEST}
   - hexo deploy # 部署
 
 # after_success: 
