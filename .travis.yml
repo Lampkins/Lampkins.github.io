@@ -13,23 +13,22 @@ install:
   - npm install
 
 
-#before_script:
- # - npm install -g gulp
+before_script:
+  - git config user.name "Lampkins"
+  - git config user.email "1726538752@qq.com"
+  # 将_config.yml中的'git@github.com:'替换为'https://${GH_TOKEN}@github.com/''
+  - sed -i "s~git@github.com:~https://${GH_TOKEN}@github.com/~" _config.yml
 
 script:
   - hexo clean # 清空原public
   - hexo generate # 生成public
+  - echo ${ENV_TEST}
+  - hexo deploy # 部署
 
-after_success:
-  - cd ./public
-  - git init
-  - git config user.name "Lampkins"
-  - git config user.email "1726538752@qq.com"
-  - sed -i "s~git@github.com:~https://${GH_TOKEN}@github.com/~" _config.yml
-  # - hexo deploy > /dev/null
-  - git add .
-  - git commit -am "Travis CI Build:$date '+%Y-%m-%d %H:%M:%S' -d '+8 hour"
-  - git push origin master:master
+# after_success: 
+  # - git add .
+  # - git commit -am "Travis CI Build:$date '+%Y-%m-%d %H:%M:%S' -d '+8 hour"
+  # - git push origin master:master
 # E: Build LifeCycle
 
 branches:
