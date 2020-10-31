@@ -16,20 +16,16 @@ install:
 before_script:
   - git config user.name "Lampkins"
   - git config user.email "1726538752@qq.com"
+  # 将_config.yml中的'git@github.com:'替换为'https://${GH_TOKEN}@github.com/''
+  - sed -i "s~git@github.com:~https://${GH_TOKEN}@github.com/~" _config.yml
   
 
 script:
   - hexo clean # 清空原public
   - hexo generate --force # 生成public
-  # 将_config.yml中的'git@github.com:'替换为'https://${GH_TOKEN}@github.com/''
-  - sed "108c \ repository:\ https://${GH_TOKEN}@github.com/Lampkins/Lampkins.github.io.git" _config.yml
-  # - sed -i "s~git@github.com:~https://${GH_TOKEN}@github.com/~" _config.yml
-  - hexo deploy > /dev/null # 部署
-  # 将_config.yml中的'git@github.com:'替换为'https://${GH_TOKEN}@github.com/''
-  - sed "108c \ trepository:\ https://${GE_TOKEN}@gitee.com/lampkins/Lampkins.gitee.io.git" _config.yml
   - hexo deploy > /dev/null # 部署
 
-# after_success: 
+# after_script: 
   # - git add .
   # - git commit -am "Travis CI Build:$date '+%Y-%m-%d %H:%M:%S' -d '+8 hour"
   # - git push origin master:master
