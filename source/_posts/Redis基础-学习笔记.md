@@ -9,7 +9,6 @@ donate: true
 comments: true
 date: 2020-10-13 22:14:16
 categories:
-- 技术
 - 数据库
 tags:
 - Redis

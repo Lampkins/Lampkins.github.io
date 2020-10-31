@@ -9,7 +9,6 @@ donate: false
 comments: true
 date: 2020-10-25 11:46:57
 categories:
-- 技术
 - 数据库
 tags:
 - 事务

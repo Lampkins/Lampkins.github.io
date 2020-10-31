@@ -2,16 +2,17 @@
 uuid: 12905e29-d01a-8b25-864c-12be8d3bffd6
 author: Lampkins
 title: Java虚拟机 JVM笔记
-categories:
-- 技术
-tags:
-- Java
-- JVM
+date: 2020-10-12 19:53:49
 qrcode: true
 share_menu: true
 toc: true
 donate: true
 comments: true
+categories:
+- Java
+tags:
+- Java
+- JVM
 ---
 
 JVM是JRE的一部分，是一个虚构出来的计算机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。
