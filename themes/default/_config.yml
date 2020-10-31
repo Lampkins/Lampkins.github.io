@@ -1,0 +1,98 @@
+theme_color:
+  primary: blue-grey
+  accent: blue
+
+notice:
+
+favicon: /images/favicon.png
+banner: /images/banner1.jpg
+avatar: /images/avatar1.jpg
+rss: /atom.xml
+
+email: arivins_lau@foxmail.com
+sns:
+  twitter:
+  facebook:
+  google_plus:
+  weibo:
+  instagram: https://www.instagram.com/arimis0
+  tumblr: 
+  github: https://github.com/Lampkins
+  gitee: https://gitee.com/lampkins
+  linkedin:
+  zhihu:
+  douban: 
+  qq: https://qm.qq.com/cgi-bin/qm/qr?k=g3rAKPWjqKBJ7oezteErpQGrtxISDNmp&noverify=0
+  wechat:
+
+open_graph:
+  twitter:
+  google_plus:
+  fb_admins:
+  fb_app_id:
+site_verification:
+  google:
+  baidu:
+analytics:
+  google_site_id:
+  baidu_site_id:
+  cnzz_site_id:
+
+pages:
+- name: 标签云
+  link: /tagcloud
+- name: 画廊
+  link: /gallery
+links:
+- name: 路过图床
+  link: https://imgchr.com/3312862586
+- name: 博客主题
+  link: https://github.com/niemingzhao/niemingzhao.github.io/tree/theme
+
+since: 2019
+footer_text: "| Theme by <a href=\"https://github.com/niemingzhao/niemingzhao.github.io/tree/theme\" target=\"_blank\" class=\"mdui-text-color-theme-accent\">default</a>"
+license:
+
+gallery:
+  fancybox_css: https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css
+  fancybox_js: https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js
+  jquery_js: https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js
+  lazyload_js: https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js
+busuanzi:
+  site: true
+  page: true
+  busuanzi_js: http://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
+qrcode:
+  caption: 发送到手机
+  use: plugin
+donate:
+- name: QQ支付
+  link: /images/qqpay.jpg
+- name: 支付宝
+  link: /images/alipay.jpg
+search:
+  placeholder: 请输入关键字
+  path: /search.xml
+  use: plugin
+comment:
+  use: gitalk
+  disqus_shortname:
+  gitalk_client_id: d17f668bcd7f140d735f
+  gitalk_client_secret: 3058f2300347db4f27a87d10648565e8d0549033
+  gitalk_repo: Lampkins.github.io
+  gitalk_owner: lampkins
+  gitalk_sid_type: uuid
+  livere_data_uid:
+  valine_leancloud_app_id:
+  valine_leancloud_app_key:
+  valine_placeholder:
+  valine_page_size:
+  valine_avatar:
+  valine_lang:
+  valine_guest_info:
+  valine_notify:
+  valine_verify:
+  valine_sid_type:
+  changyan_app_id:
+  changyan_app_key:
+  changyan_sid_type:
