@@ -104,8 +104,8 @@ theme: default
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repository: https://gitee.com/lampkins/lampkins.git
-  # repository: git@github.com:Lampkins/Lampkins.github.io.git
+  # repository: https://gitee.com/lampkins/lampkins.git
+  repository: git@github.com:Lampkins/Lampkins.github.io.git
   branch: master
 
 # Markdown

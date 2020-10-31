@@ -19,7 +19,6 @@ install:
 script:
   - hexo clean # 清空原public
   - hexo generate # 生成public
-  - hexo deploy
 
 after_success:
   - git config user.name "Lampkins"
