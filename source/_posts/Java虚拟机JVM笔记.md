@@ -52,11 +52,11 @@ JVM是JRE的一部分，是一个虚构出来的计算机，是通过在实际�
 
 1. **启动类（根）加载器 Bootstrap ClassLoader**
 
-   加载`java`核心库 `java.*`，构造`ExtClassLoader`和`AppClassLoader`
+   加载`java`核心库 `java.*`，`%JAVA_HOME%/lib`路径下的jar包，构造ExtClassLoader和AppClassLoader
 
 2. **扩展类加载器 Extension ClassLoader**
 
-   加载扩展库，如`classpath`中的`jre` ，`javax.*`或者`java.ext.dir` 指定位置中的类，开发者可以直接使用标准扩展类加载器。
+   加载扩展库，如`%JAVA_HOME%/jre/lib/ext` ，`javax.*`或者`java.ext.dir` 指定位置中的类，开发者可以直接使用标准扩展类加载器。
 
 3. **应用程序（系统类）加载器 AppClassLoader**
 
@@ -80,11 +80,41 @@ APP -- EXC -- BOOT
 
 **过程**
 
-1. 类加载器收到类加载的请求!
-2. 将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器 （loadClass(name, false), findBootstrapClassOrNull(name)）
-3. 启动类加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则， 抛出异常，通知子加载器进行加载 （fingClass(name)）
-4. 重复步骤3
+1. 类加载器收到类加载的请求
+2. 检查该类是否已经被加载，是则直接使用，否则执行3
+3. 将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器
+4. 启动类加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则， 抛出异常，通知子加载器进行加载
+5. 重复步骤4
    Class Not Found ~
+
+```java
+synchronized (getClassLoadingLock(name)) {
+    // 从内存中检查该类是否已被加载过，没有则执行加载流程
+    Class<?> c = findLoadedClass(name);
+    if (c == null) {
+        try {
+            if (parent != null) {
+                c = parent.loadClass(name, false); // 委托给父类加载器加载
+            } else {
+                c = findBootstrapClassOrNull(name); // 没有父类则委托给启动类加载器加载
+            }
+        } catch (ClassNotFoundException e) {
+            // ClassNotFoundException thrown if class not found from the non-null parent class loader
+        }
+
+        if (c == null) {
+            // 如果向上委托没有找到，则用当前加载器(不含启动类加载器)去查找并加载
+            c = findClass(name);
+        }
+    }
+    if (resolve) { //是否需要在加载时解析类
+        resolveClass(c);
+    }
+    return c;
+}
+```
+
+
 
 ![7634245-7b7882e1f4ea5d7d.png](Java虚拟机JVM笔记/7634245-7b7882e1f4ea5d7d.png){.fancybox}
 
