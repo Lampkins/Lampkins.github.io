@@ -20,6 +20,7 @@
 <meta property="og:description" content="JVM是JRE的一部分，是一个虚构出来的计算机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。  ¶ JVM探究  请你谈谈你对JVM的理解？java8虚拟机和之前的变化更新” 什么是OOM？什么是栈溢出StackOverFlowError？怎么分析？ JVM的常用调优参数有哪些？ 内存快照如何抓取？怎么分析Dump文件?知道吗？谈谈JVM中，类加载器你的认识？   jvm java运行时">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004185637450.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201101152617785.png">
 <meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004214922822.png">
 <meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201005183502733.png">
 <meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004230714888.png">
@@ -33,8 +34,8 @@
 <meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155131800.png">
 <meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155936528.png">
 <meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201012155842619.png">
-<meta property="article:published_time" content="2020-10-12T12:41:05.202Z">
-<meta property="article:modified_time" content="2020-10-23T09:23:46.663Z">
+<meta property="article:published_time" content="2020-10-12T11:53:49.000Z">
+<meta property="article:modified_time" content="2020-11-03T03:46:43.268Z">
 <meta property="article:author" content="Lampkins">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="JVM">
@@ -125,7 +126,7 @@
       </div>
       <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
         
-        <a class="mdui-ripple sidebar_archives-link" href="/archives/2020/10/">十月 2020<span class="mdui-ripple sidebar_archives-count">11</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/09/">九月 2020<span class="mdui-ripple sidebar_archives-count">2</span></a>
+        <a class="mdui-ripple sidebar_archives-link" href="/archives/2020/10/">十月 2020<span class="mdui-ripple sidebar_archives-count">11</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/09/">九月 2020<span class="mdui-ripple sidebar_archives-count">1</span></a>
         
       </div>
     </div>
@@ -137,7 +138,7 @@
       </div>
       <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
         
-        <a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术<span class="mdui-ripple sidebar_archives-count">4</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="mdui-ripple sidebar_archives-count">2</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">MySQL性能优化<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试<span class="mdui-ripple sidebar_archives-count">2</span></a>
+        <a class="mdui-ripple sidebar_archives-link" href="/categories/Java/">Java<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="mdui-ripple sidebar_archives-count">9</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">MySQL性能优化<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试<span class="mdui-ripple sidebar_archives-count">1</span></a>
         
       </div>
     </div>
@@ -149,7 +150,7 @@
       </div>
       <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
         
-        <a class="mdui-ripple sidebar_archives-link" href="/tags/ACID/" rel="tag">ACID<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/JMM/" rel="tag">JMM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/JVM/" rel="tag">JVM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Java/" rel="tag">Java<span class="mdui-ripple sidebar_archives-count">3</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/MySQL/" rel="tag">MySQL<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Redis/" rel="tag">Redis<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/hexo/" rel="tag">hexo<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/markdown/" rel="tag">markdown<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引<span class="mdui-ripple sidebar_archives-count">7</span></a>
+        <a class="mdui-ripple sidebar_archives-link" href="/tags/ACID/" rel="tag">ACID<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/JMM/" rel="tag">JMM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/JVM/" rel="tag">JVM<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Java/" rel="tag">Java<span class="mdui-ripple sidebar_archives-count">3</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/MySQL/" rel="tag">MySQL<span class="mdui-ripple sidebar_archives-count">7</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/Redis/" rel="tag">Redis<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/markdown/" rel="tag">markdown<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务<span class="mdui-ripple sidebar_archives-count">1</span></a><a class="mdui-ripple sidebar_archives-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引<span class="mdui-ripple sidebar_archives-count">7</span></a>
         
       </div>
     </div>
@@ -176,7 +177,7 @@
         
           <a href="https://imgchr.com/3312862586" target="_blank" class="mdui-list-item mdui-p-l-2 mdui-text-color-theme-accent mdui-ripple" style="justify-content: center;">路过图床</a>
         
-          <a href="https://github.com/niemingzhao/niemingzhao.github.io/tree/theme" target="_blank" class="mdui-list-item mdui-p-l-2 mdui-text-color-theme-accent mdui-ripple" style="justify-content: center;">博客主题</a>
+          <a href="https://github.com/Lampkins/Lampkins.github.io" target="_blank" class="mdui-list-item mdui-p-l-2 mdui-text-color-theme-accent mdui-ripple" style="justify-content: center;">博客托管</a>
         
         
       </div>
@@ -190,7 +191,7 @@
   <style>#main article .mdui-card-content .center-block{display:block!important;margin-right:auto!important;margin-left:auto!important}</style>
   <article class="mdui-card mdui-m-b-5" style="margin-top: -40px !important;">
     <header class="mdui-card-media">
-      <img src="/images/random/material-5.png" style="max-height: 240px;">
+      <img src="/images/random/material-14.png" style="max-height: 240px;">
       <div class="mdui-card-media-covered">
         <div class="mdui-card-primary">
           <div class="mdui-card-primary-title">Java虚拟机 JVM笔记</div>
@@ -256,6 +257,7 @@
 <h2 id="1.%20JVM%E7%9A%84%E4%BD%8D%E7%BD%AE"><a class="header-anchor" href="#1.%20JVM%E7%9A%84%E4%BD%8D%E7%BD%AE">¶</a> 1. JVM的位置</h2>
 <p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004185637450.png" alt="image-20201004185637450" class="fancybox"></p>
 <h2 id="2.%20JVM%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><a class="header-anchor" href="#2.%20JVM%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84">¶</a> 2. JVM的体系结构</h2>
+<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201101152617785.png" alt="image-20201101152617785"></p>
 <p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004214922822.png" alt="image-20201004214922822" class="fancybox"></p>
 <p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201005183502733.png" alt="创建对象内存分析" class="fancybox"></p>
 <h2 id="3.%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><a class="header-anchor" href="#3.%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8">¶</a> 3. 类加载器</h2>
@@ -265,11 +267,11 @@
 <ol>
 <li>
 <p><strong>启动类（根）加载器 Bootstrap ClassLoader</strong></p>
-<p>加载<code>java</code>核心库 <code>java.*</code>，构造<code>ExtClassLoader</code>和<code>AppClassLoader</code></p>
+<p>加载<code>java</code>核心库 <code>java.*</code>，<code>%JAVA_HOME%/lib</code>路径下的jar包，构造ExtClassLoader和AppClassLoader</p>
 </li>
 <li>
 <p><strong>扩展类加载器 Extension ClassLoader</strong></p>
-<p>加载扩展库，如<code>classpath</code>中的<code>jre</code> ，<code>javax.*</code>或者<code>java.ext.dir</code> 指定位置中的类，开发者可以直接使用标准扩展类加载器。</p>
+<p>加载扩展库，如<code>%JAVA_HOME%/jre/lib/ext</code> ，<code>javax.*</code>或者<code>java.ext.dir</code> 指定位置中的类，开发者可以直接使用标准扩展类加载器。</p>
 </li>
 <li>
 <p><strong>应用程序（系统类）加载器 AppClassLoader</strong></p>
@@ -286,12 +288,14 @@
 <p>向上委托，向下查找</p>
 <p><strong>过程</strong></p>
 <ol>
-<li>类加载器收到类加载的请求!</li>
-<li>将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器 （loadClass(name, false), findBootstrapClassOrNull(name)）</li>
-<li>启动类加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则， 抛出异常，通知子加载器进行加载 （fingClass(name)）</li>
-<li>重复步骤3<br>
+<li>类加载器收到类加载的请求</li>
+<li>检查该类是否已经被加载，是则直接使用，否则执行3</li>
+<li>将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器</li>
+<li>启动类加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则， 抛出异常，通知子加载器进行加载</li>
+<li>重复步骤4<br>
 Class Not Found ~</li>
 </ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (getClassLoadingLock(name)) &#123;</span><br><span class="line">    <span class="comment">// 从内存中检查该类是否已被加载过，没有则执行加载流程</span></span><br><span class="line">    Class&lt;?&gt; c = findLoadedClass(name);</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">                c = parent.loadClass(name, <span class="keyword">false</span>); <span class="comment">// 委托给父类加载器加载</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                c = findBootstrapClassOrNull(name); <span class="comment">// 没有父类则委托给启动类加载器加载</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            <span class="comment">// ClassNotFoundException thrown if class not found from the non-null parent class loader</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 如果向上委托没有找到，则用当前加载器(不含启动类加载器)去查找并加载</span></span><br><span class="line">            c = findClass(name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (resolve) &#123; <span class="comment">//是否需要在加载时解析类</span></span><br><span class="line">        resolveClass(c);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/7634245-7b7882e1f4ea5d7d.png" alt="7634245-7b7882e1f4ea5d7d.png" class="fancybox"></p>
 <p><strong>作用</strong></p>
 <ul>
@@ -317,8 +321,15 @@ Class Not Found ~</li>
 <h2 id="8.%20%E6%96%B9%E6%B3%95%E5%8C%BA%EF%BC%88%E9%9D%99%E6%80%81%E5%8C%BA%EF%BC%89"><a class="header-anchor" href="#8.%20%E6%96%B9%E6%B3%95%E5%8C%BA%EF%BC%88%E9%9D%99%E6%80%81%E5%8C%BA%EF%BC%89">¶</a> 8. 方法区（静态区）</h2>
 <p>Method Area方法区<br>
 方法区是被所有线程共享,所有字段和方法字节码，以及-一些特殊方法，如构造函数,接口代码也在此定义，简单说，所有定义的方法的信息都保存在该区域，<strong>此区域属于共享区间</strong>；<br>
-<mark>静态变量、常量、类信息(构造方法、接口定义)、串池、运行时的常量池存在方法区中，但是实例变量存在堆内存中，和方法区无关</mark></p>
+<mark>静态变量、常量、类信息(类元信息、属性、方法等)、串池、运行时常量池存在方法区中，但是实例变量存在堆内存中，和方法区无关</mark></p>
 <p>​		static、final、Class、常量池（对象字面量：基本类型的包装类对象字面量[-128,127]，String对象字面量）</p>
+<ul>
+<li>
+<p>实现区域</p>
+<p>永久代：存储包括类信息、常量、字符串常量、类静态变量、即时编译器编译后的代码等数据 <code>-XX:MaxPermSize</code></p>
+<p>元空间：本质和永久代类似，区别是其并不在虚拟机中，而是使用本地内存 <code>-XX:MetaspaceSize -XX:MaxMetaspaceSize</code></p>
+</li>
+</ul>
 <h2 id="9.%20%E6%A0%88%E5%86%85%E5%AD%98"><a class="header-anchor" href="#9.%20%E6%A0%88%E5%86%85%E5%AD%98">¶</a> 9. 栈内存</h2>
 <p>栈（栈内存），主管线程的运行，生命周期和线程同步</p>
 <p>线程结束栈内存就释放了，栈内存空了程序就结束了；不存在垃圾回收问题</p>
@@ -356,9 +367,16 @@ Class Not Found ~</li>
 <h2 id="13.%20%E6%B0%B8%E4%B9%85%E5%8C%BA"><a class="header-anchor" href="#13.%20%E6%B0%B8%E4%B9%85%E5%8C%BA">¶</a> 13. 永久区</h2>
 <p>这个区域常驻内存的。用来存放JDK自身携带的lass对象。Interface元数据， 存储的是ava运行时的一些环境或类信息，不存在垃圾回收。关闭jvm虚拟机会释放这个区域的内存。</p>
 <ul>
-<li>jdk1.6之前：永久代，常量池是在方法区；</li>
-<li>jdk1.7：永久代，但是慢慢的退化了，去永久代，常量池在堆中</li>
-<li>jdk1.8之后：无永久代，被元空间所取代，最大区别：<mark>元空间并不在虚拟机中，而是使用本地内存。</mark></li>
+<li>
+<p>jdk1.6之前：有永久代，字符串常量池和运行时常量池在方法区；</p>
+</li>
+<li>
+<p>jdk1.7：有永久代，但已经逐步”去永久代“，字符串常量池移到堆中，运行时常量池还在方法区中(永久带)</p>
+</li>
+<li>
+<p>jdk1.8之后：无永久代，被元空间所取代，字符串常量池在堆中，运行时常量池在元空间</p>
+<p>最大区别：<mark>元空间并不在虚拟机中，而是使用本地内存。</mark></p>
+</li>
 </ul>
 <h2 id="14.%20%E5%A0%86%E5%86%85%E5%AD%98%E8%B0%83%E4%BC%98"><a class="header-anchor" href="#14.%20%E5%A0%86%E5%86%85%E5%AD%98%E8%B0%83%E4%BC%98">¶</a> 14. 堆内存调优</h2>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回jvm试图使用的最大内存</span></span><br><span class="line"><span class="keyword">long</span> max = Runtime.getRuntime().maxMemory();</span><br><span class="line"><span class="comment">// 返回jvm的初始化总内存，会随着时间发生变化</span></span><br><span class="line"><span class="keyword">long</span> total = Runtime.getRuntime().totalMemory();</span><br></pre></td></tr></table></figure>
@@ -492,7 +510,7 @@ Metaspace元数据空间垃圾回收</p>
     </div>
     <footer class="mdui-card-actions">
       
-        <a class="mdui-ripple article_categories-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+        <a class="mdui-ripple article_categories-link" href="/categories/Java/">Java</a>
       
       
         <a class="mdui-ripple article_tags-link" href="/tags/JVM/" rel="tag">JVM</a><a class="mdui-ripple article_tags-link" href="/tags/Java/" rel="tag">Java</a>
@@ -601,7 +619,7 @@ Metaspace元数据空间垃圾回收</p>
   </div>
   <div class="mdui-p-y-1 mdui-text-center">
     Copyright &copy; 2019 - 2020 Lampkins<br>
-    Powered by <a href="https://hexo.io/" target="_blank" class="mdui-text-color-theme-accent">Hexo</a>| Theme by <a href="https://github.com/niemingzhao/niemingzhao.github.io/tree/theme" target="_blank" class="mdui-text-color-theme-accent">default</a>
+    Powered by <a href="https://hexo.io/" target="_blank" class="mdui-text-color-theme-accent">Hexo</a> | Theme by <a href="https://github.com/niemingzhao/niemingzhao.github.io/tree/theme" target="_blank" class="mdui-text-color-theme-accent">default</a>
     <br>
       <span id="busuanzi_container_site_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_site_pv"></span></span> &nbsp;&nbsp;
       <span id="busuanzi_container_site_uv" style="display: none;"><i class="iconfont">&#xe601;</i> <span id="busuanzi_value_site_uv"></span></span>
