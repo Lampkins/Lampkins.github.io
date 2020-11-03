@@ -46,11 +46,11 @@ pages:
 links:
 - name: 路过图床
   link: https://imgchr.com/3312862586
-- name: 博客主题
-  link: https://github.com/niemingzhao/niemingzhao.github.io/tree/theme
+- name: 博客托管
+  link: https://github.com/Lampkins/Lampkins.github.io
 
 since: 2019
-footer_text: "| Theme by <a href=\"https://github.com/niemingzhao/niemingzhao.github.io/tree/theme\" target=\"_blank\" class=\"mdui-text-color-theme-accent\">default</a>"
+footer_text: " | Theme by <a href=\"https://github.com/niemingzhao/niemingzhao.github.io/tree/theme\" target=\"_blank\" class=\"mdui-text-color-theme-accent\">default</a>"
 license:
 
 gallery:
