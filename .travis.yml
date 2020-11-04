@@ -18,6 +18,7 @@ before_script:
   - git config user.email "1726538752@qq.com"
   # 将_config.yml中的'git@github.com:'替换为'https://${GH_TOKEN}@github.com/''
   - sed -i "s~git@github.com:~https://${GH_TOKEN}@github.com/~" _config.yml
+  - sed -i "s~git@gitee.com:~https://${GE_TOKEN}@gitee.com/~" _config.yml
   
 
 script:
