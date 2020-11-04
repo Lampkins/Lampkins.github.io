@@ -22,8 +22,8 @@ before_script:
 
 script:
   - hexo clean # 清空原public
-  - hexo generate --force # 生成public
-  - hexo deploy > /dev/null # 部署
+  - hexo generate --force > /dev/null # 生成public
+  - hexo deploy # 部署
 
 # after_script: 
   # - git add .

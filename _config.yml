@@ -103,10 +103,13 @@ theme: default
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: git
-  # repository: https://gitee.com/lampkins/lampkins.git
-  repository: git@github.com:Lampkins/Lampkins.github.io.git
+- type: git
+  repo: git@github.com:Lampkins/Lampkins.github.io.git
   branch: master
+- type: git
+  repo: git@gitee.com:lampkins/lampkins.git
+  branch: master
+
 
 # Markdown
 ## Docs: https://github.com/niemingzhao/hexo-renderer-markdown#readme
