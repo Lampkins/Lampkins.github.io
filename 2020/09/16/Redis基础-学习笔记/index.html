@@ -15,32 +15,32 @@
   <meta name="description" content="Redis 是一个内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。  ¶ NoSQL概述 NoSQL &#x3D; Not Only SQL 不仅仅是SQL 关系型数据库：表格，行、列 很多的数据类型，如用户的个人信息、社交网络、地理位置。这些数据类型的存储不需要一个固定的格式， 不需要多余的操作就可以横向扩展。 ¶ 特点  方便扩展(数据之间没有关系，很好扩展! ) 大数据量高性能( Red">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis基础 学习笔记">
-<meta property="og:url" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:url" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="博客">
 <meta property="og:description" content="Redis 是一个内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。  ¶ NoSQL概述 NoSQL &#x3D; Not Only SQL 不仅仅是SQL 关系型数据库：表格，行、列 很多的数据类型，如用户的个人信息、社交网络、地理位置。这些数据类型的存储不需要一个固定的格式， 不需要多余的操作就可以横向扩展。 ¶ 特点  方便扩展(数据之间没有关系，很好扩展! ) 大数据量高性能( Red">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201001180930883-1603273481613.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002175210711-1603273481614.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002191438203-1603273481614.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002223857890-1603273481615.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002223944105-1603273481615.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002225013710-1603273481615.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002232010221-1603273481615.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003180444252-1603273481615.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003193304549-1603273481616.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003193545996-1603273481616.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021164003157.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021165228987.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021165652288.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021170505844.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021170804287.png">
-<meta property="article:published_time" content="2020-10-13T14:14:16.000Z">
-<meta property="article:modified_time" content="2020-10-31T14:22:16.787Z">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201001180930883-1603273481613.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002175210711-1603273481614.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002191438203-1603273481614.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002223857890-1603273481615.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002223944105-1603273481615.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002225013710-1603273481615.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002232010221-1603273481615.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003180444252-1603273481615.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003193304549-1603273481616.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003193545996-1603273481616.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021164003157.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021165228987.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021165652288.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021170505844.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021170804287.png">
+<meta property="article:published_time" content="2020-09-16T14:14:16.000Z">
+<meta property="article:modified_time" content="2020-11-05T11:40:00.326Z">
 <meta property="article:author" content="Lampkins">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201001180930883-1603273481613.png">
+<meta name="twitter:image" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201001180930883-1603273481613.png">
 
   <meta name="keywords" content=",Java,Redis">
   <meta name="format-detection" content="telephone=no,email=no">
@@ -48,7 +48,7 @@
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="博客">
-  <meta name="msapplication-starturl" content="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+  <meta name="msapplication-starturl" content="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
   <meta name="msapplication-navbutton-color" content="#9C27B0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="博客">
@@ -56,7 +56,7 @@
   <link rel="apple-touch-icon" href="/images/favicon.png">
 
   
-    <link rel="canonical" href="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+    <link rel="canonical" href="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
   
 
   
@@ -126,7 +126,7 @@
       </div>
       <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
         
-        <a class="mdui-ripple sidebar_archives-link" href="/archives/2020/11/">十一月 2020<span class="mdui-ripple sidebar_archives-count">2</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/10/">十月 2020<span class="mdui-ripple sidebar_archives-count">11</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/09/">九月 2020<span class="mdui-ripple sidebar_archives-count">1</span></a>
+        <a class="mdui-ripple sidebar_archives-link" href="/archives/2020/11/">十一月 2020<span class="mdui-ripple sidebar_archives-count">2</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/10/">十月 2020<span class="mdui-ripple sidebar_archives-count">8</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/09/">九月 2020<span class="mdui-ripple sidebar_archives-count">4</span></a>
         
       </div>
     </div>
@@ -191,13 +191,13 @@
   <style>#main article .mdui-card-content .center-block{display:block!important;margin-right:auto!important;margin-left:auto!important}</style>
   <article class="mdui-card mdui-m-b-5" style="margin-top: -40px !important;">
     <header class="mdui-card-media">
-      <img src="/images/random/material-10.png" style="max-height: 240px;">
+      <img src="/images/random/material-7.png" style="max-height: 240px;">
       <div class="mdui-card-media-covered">
         <div class="mdui-card-primary">
           <div class="mdui-card-primary-title">Redis基础 学习笔记</div>
           <div class="mdui-card-primary-subtitle">
             
-            <i class="iconfont">&#xe697;</i> 2020-10-13 / <i class="iconfont">&#xe601;</i> Lampkins &nbsp;&nbsp; <span id="busuanzi_container_page_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_page_pv"></span></span>
+            <i class="iconfont">&#xe697;</i> 2020-09-16 / <i class="iconfont">&#xe601;</i> Lampkins &nbsp;&nbsp; <span id="busuanzi_container_page_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_page_pv"></span></span>
           </div>
         </div>
       </div>
@@ -210,7 +210,7 @@
             
             <li class="mdui-menu-item" disabled>
               
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ4AAAEOCAAAAABd2qZ5AAADjUlEQVR42u3aQW5iQQwE0Nz/0jPbSCNIld0NRPP+CgEhvx8LY7u+/ri+XV8IcODAgQMHDhw4cOD4YI6v+Pr+/ocf/eCd+eN/P//585uz4MCBAweOexw/lKKnN52T5ZSPXn10pNlZcODAgQPHbY68uBZlbFSqk2M//+TiLDhw4MCB460cs8bpVHHNCy0OHDhw4PgtHM9vNGqZ1oX81/zuwIEDB47/nqMYqJUleVMskzL8tlkpDhw4cOA4Gmj4zMdvy3fgwIEDB47RlYTb8hjEqdZudSIcOHDgwHGUI4/B5SUtP+Sj988WWvmn4cCBAweO13DkY8FZoOHUYfajSRw4cODAcZujXSw9f75t9pL2LP/kBBoHDhw4cNzjyMMEN8hmYYW26D5HwYEDBw4cZzk2JfDs6qhdJs3KMA4cOHDgeA1HXZzKYtmW7fyZ2f/CgQMHDhz3OPI1z40hYP7FzA4f/TjAgQMHDhxHOfLDzI7atnP5q8nX9ie4cODAgQPHPY42XjBrt/JxXjsibMeUOHDgwIHjBkc+BJwFGmZLrPY9s4gGDhw4cOC4wbEvmXlD2LZ2+auzaAUOHDhw4LjB0cYLZjGIdkU0W2i1sQwcOHDgwHGDYxMIGEbT4oXQ7AdB/eXhwIEDB44LHLNAQN56bSLXt9dgOHDgwIHjLMesJWtvtw0x5CO/pDD/sAbDgQMHDhxHOTaNWX5zbfHOIxFt61j87sCBAwcOHAuOWaOVt0xtIDtvBWfvwYEDBw4cr+Rog9F5szeLTW8avOivcODAgQPHUY5Zk5asqTZ/NYvWzQadOHDgwIHjNses3ZqNFDfrruSrisaROHDgwIHjAkceNchLZoueD/Vmq6kD+Q4cOHDgwDHiaA/TltJNiW2jEgcKLQ4cOHDgKDleH4k7G6HO77MONODAgQMHjhFHW8z2YYI20LBfgw0DDThw4MCBY8GRh9LyYdypMV++7sovHDhw4MBxm2NWbvPxXL6+ahdIdcOGAwcOHDguc7TFaXaYfGiYt2Gbtg0HDhw4cNzmyNdIm6D2DGVzDwcCDThw4MCBY8GxibIVw7iyAcv5Zo0iDhw4cOB4L8dmdbRZR9WHzO8fBw4cOHB8AEdbjPfHaCmL5hAHDhw4cFzjmBXCWbltQ3Kbr+0HJhw4cODAcYFjE2hIjpeD5gPBUysoHDhw4MBxlsOFAwcOHDhw4MCBAweOD7v+AkzaTs+g9n+ZAAAAAElFTkSuQmCC">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ4AAAEOCAAAAABd2qZ5AAADhklEQVR42u3awW4iQQwE0Pz/T+9eI60gVXY3EO2bU5QQGL85FHb764/r2/WFAAcOHDhw4MCBAweOD+b4iq/vr3/41g9emf/87/s///2mFhw4cODAcY/jhyh6etM5WU756K+PSprVggMHDhw4bnPk4VrE2Ciqk7Kfv3NRCw4cOHDgeCvH81YqKWYTrnnQ4sCBAweO38Lx/EaTUvdB/mu+d+DAgQPHf89RDNSCEeGpsGzv6qWzUhw4cODAcXSh4TN/ftt+Bw4cOHDgGF1JuCZt3uyAqh0+RhXhwIEDB46jHPka3Gxh7uwhVjuOjJpMHDhw4MBxjWM/FkzCdV/MrL3EgQMHDhyv5Mibpfz3ebPXtnxJwBePHAcOHDhwHOXIlwlmxbcoSZFt6D5HwYEDBw4cZzn2EbhZs8sHf/nDqwMeBw4cOHBc4KjDqQzLfBTYHm7NPgsHDhw4cNzjaCPwQLAFN90G/+YrAg4cOHDgOMuRFzMrNQnyWXwmg8ioycSBAwcOHNc4Zjfatlt5VLcjwvzB4MCBAweO2xztTSchl0Pni3ezdhEHDhw4cLyX4+ySQT5SnB2G5Vg4cODAgeNdHHmjla9B5EdNswOt2VoGDhw4cOC4wbFfa6g/Pj4Qmo0j64eHAwcOHDiOcuT/lsPlETsL2tmh13BVDgcOHDhwlBybFqgdI7al5rizR4UDBw4cOG5wbBqzfN1hE95JO5e3jtH3Dhw4cODAseZoS9qsu51ag8irqBcacODAgQPHUY5NeXmzlxxK5fTtw8OBAwcOHPc4kibt3hHU89e0q3WzQScOHDhw4LjNkbdbCVle8KnYzkMdBw4cOHDc42g/eHak1HLMwri9Qxw4cODA8UqO1ccEo7o2YvPms1ihwIEDBw4cRznywd/s9cNbjJchNs0kDhw4cOC4wdFe+2WCdqFh8+nRMBEHDhw4cFzg+CqvNuQ2Y76kvM3948CBAweOGxyngrZtxnKI5yG6GRfiwIEDB46zHG04zYrJh4Z5G7Zp23DgwIEDx22O9tgpP+Bpl+qSID/VUuLAgQMHjtscm1W2YhhXNmA536xRxIEDBw4c7+WYlZcH+bEi8/vHgQMHDhwfwNGG8b6MlrJoDnHgwIEDxzWOTRC2o8B2SW7z2H64Exw4cODAcYFjv9CQ/1e+vnD2GAwHDhw4cLyGw4UDBw4cOHDgwIEDB44Pu/4C4DROz35HtOcAAAAASUVORK5CYII=">
               
             </li>
           </ul>
@@ -219,25 +219,25 @@
           <button class="mdui-btn mdui-btn-icon mdui-text-color-white" mdui-menu="{target: '#share_menu', align: 'right'}"><i class="mdui-icon material-icons">share</i></button>
           <ul class="mdui-menu" id="share_menu">
             <li class="mdui-menu-item">
-              <a href="http://service.weibo.com/share/share.php?appkey=&title=Redis基础 学习笔记&url=http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/&pic=http://lampkins.gitee.io/images/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
+              <a href="http://service.weibo.com/share/share.php?appkey=&title=Redis基础 学习笔记&url=http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/&pic=http://lampkins.gitee.io/images/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://twitter.com/intent/tweet?text=Redis基础 学习笔记&url=http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/&via=Lampkins" target="_blank" class="mdui-ripple">分享到 Twitter</a>
+              <a href="https://twitter.com/intent/tweet?text=Redis基础 学习笔记&url=http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/&via=Lampkins" target="_blank" class="mdui-ripple">分享到 Twitter</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://www.facebook.com/sharer/sharer.php?u=http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://plus.google.com/share?url=http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 Google+</a>
+              <a href="https://plus.google.com/share?url=http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 Google+</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/&title=Redis基础 学习笔记" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
+              <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/&title=Redis基础 学习笔记" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="http://connect.qq.com/widget/shareqq/index.html?site=博客&title=Redis基础 学习笔记&pics=http://lampkins.gitee.io/images/favicon.png&url=http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 QQ</a>
+              <a href="http://connect.qq.com/widget/shareqq/index.html?site=博客&title=Redis基础 学习笔记&pics=http://lampkins.gitee.io/images/favicon.png&url=http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 QQ</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://telegram.me/share/url?url=http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/&text=Redis基础 学习笔记" target="_blank" class="mdui-ripple">分享到 Telegram</a>
+              <a href="https://telegram.me/share/url?url=http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/&text=Redis基础 学习笔记" target="_blank" class="mdui-ripple">分享到 Telegram</a>
             </li>
           </ul>
         
@@ -388,7 +388,7 @@ unit:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedisTemplate&lt;String, Object&gt; <span class="title">redisTemplate</span><span class="params">(LettuceConnectionFactory lettuceConnectionFactory)</span> </span>&#123;</span><br><span class="line">        RedisTemplate&lt;String, Object&gt; template = <span class="keyword">new</span> RedisTemplate&lt;&gt;();</span><br><span class="line">        template.setConnectionFactory(lettuceConnectionFactory);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Json序列化配置</span></span><br><span class="line">        Jackson2JsonRedisSerializer&lt;Object&gt; jackson2JsonRedisSerializer = <span class="keyword">new</span> Jackson2JsonRedisSerializer&lt;&gt;(Object.class);</span><br><span class="line">        ObjectMapper om = <span class="keyword">new</span> ObjectMapper();</span><br><span class="line">        <span class="comment">// 指定要序列化的域，field,get和set,以及修饰符范围，ANY是都有包括private和public</span></span><br><span class="line">        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);</span><br><span class="line">        <span class="comment">// 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会抛出异常</span></span><br><span class="line">        om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);</span><br><span class="line">        jackson2JsonRedisSerializer.setObjectMapper(om);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// key和hash的key 采用String的序列化方式</span></span><br><span class="line">        template.setKeySerializer(<span class="keyword">new</span> StringRedisSerializer());</span><br><span class="line">        template.setHashKeySerializer(<span class="keyword">new</span> StringRedisSerializer());</span><br><span class="line">        <span class="comment">// value和hash的value 采用Jackson的序列化方式</span></span><br><span class="line">        template.setValueSerializer(jackson2JsonRedisSerializer);</span><br><span class="line">        template.setHashValueSerializer(jackson2JsonRedisSerializer);</span><br><span class="line">        template.afterPropertiesSet();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> template;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Redis.conf"><a class="header-anchor" href="#Redis.conf">¶</a> Redis.conf</h2>
 <h3 id="1.%20%E5%8C%85%E5%90%AB%20INCLUDES"><a class="header-anchor" href="#1.%20%E5%8C%85%E5%90%AB%20INCLUDES">¶</a> 1. 包含 INCLUDES</h3>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201001180930883-1603273481613.png" alt="0" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201001180930883-1603273481613.png" alt="0" class="fancybox"></p>
 <h3 id="2.%20%E7%BD%91%E7%BB%9C%20NETWORK"><a class="header-anchor" href="#2.%20%E7%BD%91%E7%BB%9C%20NETWORK">¶</a> 2. 网络 NETWORK</h3>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">bind</span> 192.168.26.128 127.0.0.1 <span class="comment"># 绑定的ip</span></span><br><span class="line">protected-mode yes <span class="comment"># 保护模式</span></span><br><span class="line">port 6379 <span class="comment"># 端口设置</span></span><br></pre></td></tr></table></figure>
 <h3 id="3.%20%E9%80%9A%E7%94%A8%E9%85%8D%E7%BD%AE%20GENERAL"><a class="header-anchor" href="#3.%20%E9%80%9A%E7%94%A8%E9%85%8D%E7%BD%AE%20GENERAL">¶</a> 3. 通用配置 GENERAL</h3>
@@ -410,7 +410,7 @@ unit:</p>
 <p>Redis是内存数据库，如果没有持久化，那么断电后就会失去数据，所以Redis提供了持久化的功能。</p>
 <h3 id="RDB%EF%BC%88Redis%20Database%EF%BC%89"><a class="header-anchor" href="#RDB%EF%BC%88Redis%20Database%EF%BC%89">¶</a> RDB（Redis Database）</h3>
 <p>在指定的时间间隔类将内存中的数据集进行快照存储，恢复的时候则将快照文件加载到内存中。</p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002175210711-1603273481614.png" alt="rdb持久化过程" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002175210711-1603273481614.png" alt="rdb持久化过程" class="fancybox"></p>
 <p>RDB在保存文件时父进程会单独创建（fork）一个子线程来进行持久化操作，先将数据写入一个临时文件中，写完成后，再用其替换掉上次已持久化的文件。整个过程主线程不进行IO操作，故而确保了极高的性能。如果需要进行大规模数据的恢复，且对于数据恢复的完整性不是非常敏感，那么RDB方式要比AOF方式更加的高效。</p>
 <p><strong>触发机制</strong></p>
 <ol>
@@ -443,7 +443,7 @@ unit:</p>
 <h3 id="AOF%EF%BC%88Append%20Only%20File%EF%BC%89"><a class="header-anchor" href="#AOF%EF%BC%88Append%20Only%20File%EF%BC%89">¶</a> AOF（Append Only File）</h3>
 <p>以日志文本的形式记录Redis所处理的每一个写操作，恢复的时候把文件汇中的命令都执行一遍即可。</p>
 <p>命令实时写入和重写(rewrite)，由于缓存的写操作是实时写入aof文件，当触发重写规则（如：aof文件过大）时，会重新生成恢复当前数据集所需的最小命令集合，即rewrite操作。</p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002191438203-1603273481614.png" alt="rewrite流程" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002191438203-1603273481614.png" alt="rewrite流程" class="fancybox"></p>
 <p>appendonly.aof</p>
 <p>如果aof文件有问题，redis启动不了，可以通过<code>redis-check-aof --fix</code>工具修复aof文件。</p>
 <p><strong>优点：</strong></p>
@@ -456,11 +456,11 @@ unit:</p>
 <li>对于相同的数据集来说，aof文件体积远大于rdb，修复速度也比rdb慢</li>
 <li>根据所使用的 fsync 策略，AOF 的速度可能会慢于 RDB。在处理巨大的写入载入时，RDB 可以提供更有保证的最大延迟时间（latency）</li>
 </ul>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002223857890-1603273481615.png" alt="image-20201002223857890" class="fancybox"></p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002223944105-1603273481615.png" alt="image-20201002223944105" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002223857890-1603273481615.png" alt="image-20201002223857890" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002223944105-1603273481615.png" alt="image-20201002223944105" class="fancybox"></p>
 <h2 id="Redis%E5%8F%91%E5%B8%83%E4%B8%8E%E8%AE%A2%E9%98%85"><a class="header-anchor" href="#Redis%E5%8F%91%E5%B8%83%E4%B8%8E%E8%AE%A2%E9%98%85">¶</a> Redis发布与订阅</h2>
 <p>Redis发布订阅(pub/sub)是一种<mark>消息通信模式</mark>：发送者(pub)发送消息，订阅者(sub)接收消息。传送消息的链路称为<mark>信道</mark>。</p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002225013710-1603273481615.png" alt="image-20201002225013710" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002225013710-1603273481615.png" alt="image-20201002225013710" class="fancybox"></p>
 <p><strong>命令</strong></p>
 <table>
 <thead>
@@ -510,7 +510,7 @@ unit:</p>
 <li>订阅、关注系统</li>
 </ul>
 <p>较复杂的场景会使用消息中间件 MQ</p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002232010221-1603273481615.png" alt="image-20201002232010221" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201002232010221-1603273481615.png" alt="image-20201002232010221" class="fancybox"></p>
 <h2 id="Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><a class="header-anchor" href="#Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6">¶</a> Redis主从复制</h2>
 <h4 id="%E6%A6%82%E5%BF%B5"><a class="header-anchor" href="#%E6%A6%82%E5%BF%B5">¶</a> 概念</h4>
 <p>主从复制,是指将一台Redis服务器的数据,复制到其他的Redis服务器。前者称为主节点(master/leader)，后者称为从节点(slave/follower) ；数据的复制是单向的，只能由主节点到从节点。Master以写为主，Slave 以读为主（读写分离）。</p>
@@ -522,7 +522,7 @@ unit:</p>
 <li><strong>负载均衡：</strong> 在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务(即写Redis数据时应用连接主节点,读Redis数据时应用连接从节点)，分担服务器负载；尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
 <li><strong>高可用基石：</strong> 除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。</li>
 </ol>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003180444252-1603273481615.png" alt="image-20201003180444252" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003180444252-1603273481615.png" alt="image-20201003180444252" class="fancybox"></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&gt; info replication <span class="comment"># 查看当前redis节点信息</span></span><br><span class="line"><span class="comment"># Replication</span></span><br><span class="line">role:master</span><br><span class="line">connected_slaves:1</span><br><span class="line">slave0:ip=192.168.26.128,port=7006,state=online,offset=280,lag=1</span><br><span class="line">master_replid:8a90b2da230485bb190eb2e443bb324cbb8d7371</span><br><span class="line">master_replid2:0000000000000000000000000000000000000000</span><br><span class="line">master_repl_offset:280</span><br><span class="line">second_repl_offset:-1</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:1</span><br><span class="line">repl_backlog_histlen:280</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h4 id="%E6%90%AD%E5%BB%BA"><a class="header-anchor" href="#%E6%90%AD%E5%BB%BA">¶</a> <strong>搭建</strong></h4>
 <h5 id="1.%20%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><a class="header-anchor" href="#1.%20%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">¶</a> 1. 修改配置文件</h5>
@@ -558,14 +558,14 @@ Master接到命令，启动后台的存盘进程，同时收集所有接收到�
 <li><strong>提醒（Notification）</strong>： 当被监控的某个 Redis 服务器出现问题时， Sentinel 可以通过 API 向管理员或者其他应用程序发送通知。</li>
 <li><strong>自动故障迁移（Automatic failover）</strong>：当一个主服务器不能正常工作时， Sentinel 会使用投票协议（agreement protocols）来决定是否执行自动故障迁移， 以及选择哪个从服务器作为新的主服务器。</li>
 </ul>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003193304549-1603273481616.png" alt="哨兵模式" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003193304549-1603273481616.png" alt="哨兵模式" class="fancybox"></p>
 <p>这里的哨兵有两个作用</p>
 <ul>
 <li>通过发送命令，让Redis服务器返回监控其运行状态，包括主服务器和从服务器。</li>
 <li>当哨兵监测到master宕机，会自动将slave切换成master，然后通过<mark>发布订阅</mark>模式通知其他的从服务器,修改配置文件，让它们切换主机。</li>
 </ul>
 <p>然而一个哨兵进程对Redis服务器进行监控,可能会出现问题，为此，我们可以使用多个哨兵进行监控。各个哨兵之间还会进行监控,这样就形成了多哨兵模式。</p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003193545996-1603273481616.png" alt="多哨兵模式" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201003193545996-1603273481616.png" alt="多哨兵模式" class="fancybox"></p>
 <p>假设主服务器宕机，哨兵1先检测到这个结果，系统并不会马上进行failover过程，仅仅是哨兵1主观的认为主服务器不可用，这个现象成为<strong>主观下线</strong>。当后面的哨兵也检测到主服务器不可用,并且数量达到一定值时，那么哨兵之间就会进行一次投票，投票的结果由一个哨兵发起，进行failover[故障转移]操作。切换成功后，就会通过发布订阅模式,让各个哨兵把自己监控的从服务器实现切换主机，这个过程称为<strong>客观下线</strong>。</p>
 <p><strong>配置</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 监视一个名为mymaster的主服务器，其IP为127.0.0.1和port为7001，</span></span><br><span class="line"><span class="comment"># 2代表至少需要2个Sentinel同意（大多数Sentinel正常），该服务器才被判断为已失效宕机 </span></span><br><span class="line">sentinel monitor mymaster 127.0.0.1 7001 2</span><br></pre></td></tr></table></figure>
@@ -573,7 +573,7 @@ Master接到命令，启动后台的存盘进程，同时收集所有接收到�
 <h2 id="Redis%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E5%92%8C%E9%9B%AA%E5%B4%A9"><a class="header-anchor" href="#Redis%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E5%92%8C%E9%9B%AA%E5%B4%A9">¶</a> Redis缓存穿透和雪崩</h2>
 <p>Redis缓存的使用，极大的提升了应用程序的性能和效率，特别是数据查询方面。但同时，它也带来了一些问题。其中，最要害的问题，就是数据的一致性问题，从严格意义上讲，这个问题无解。如果对数据的一致性要求很高，那么就不能使用缓存。</p>
 <p>另外的一些典型问题就是，缓存穿透、缓存雪崩和缓存击穿。目前，业界也都有比较流行的解决方案。</p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021164003157.png" alt="image-20201021164003157" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021164003157.png" alt="image-20201021164003157" class="fancybox"></p>
 <h4 id="%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><a class="header-anchor" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F">¶</a> 缓存穿透</h4>
 <blockquote>
 <p><strong>概念：</strong></p>
@@ -584,10 +584,10 @@ Master接到命令，启动后台的存盘进程，同时收集所有接收到�
 </blockquote>
 <p><strong>布隆过滤器</strong></p>
 <p>布隆过滤器是一种数据结构，对所有可能查询的参数以hash形式存储，在控制层先进行校验，不符合则丢弃，从而避免了对底层存储系统的查询压力;</p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021165228987.png" alt="image-20201021165228987" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021165228987.png" alt="image-20201021165228987" class="fancybox"></p>
 <p><strong>缓存空对象</strong></p>
 <p>当存储层未命中后，即使返回的是空对象也将其缓存起来，同时设置一个过期时间，之后再访问该数据将会从缓存中获取，避免了给后端数据库带来压力。</p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021165652288.png" alt="image-20201021165652288" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021165652288.png" alt="image-20201021165652288" class="fancybox"></p>
 <p>但是这种方法会存在两个问题：</p>
 <ol>
 <li>如果空值能够被缓存起来，这就意味着缓存需要更多的空间存储更多的键；</li>
@@ -606,11 +606,11 @@ Master接到命令，启动后台的存盘进程，同时收集所有接收到�
 <p>从缓存层面来看，没有设置过期时间，所以不会出现热点key过期后产生的问题。</p>
 <p><strong>加互斥锁</strong></p>
 <p>分布式锁：使用分布式锁，保证对于每个key同时只有一个线程去查询后端服务，其他线程没有获得分布式锁的权限，因此只需要等待即可。这种方式将高井发的压力转移到了分布式锁，因此对分布式锁的考验很大。</p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021170505844.png" alt="image-20201021170505844" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021170505844.png" alt="image-20201021170505844" class="fancybox"></p>
 <h4 id="%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><a class="header-anchor" href="#%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9">¶</a> 缓存雪崩</h4>
 <p>缓存雪崩，是指在某一个时间段，缓存集中过期失效，Redis 宕机。</p>
 <p>比如在写本文的时候,马上就要到双11零点，很快就会迎来一波抢购，这波商品时间比较集中的放入了缓存，假设缓存一个小时。那么到了凌晨一点钟的时候，这批商品的缓存就都过期了。而对这批商品的访问查询，都落到了数据库上，对于数据库而言,就会产生周期性的压力波峰。于是所有的请求都会达到存储层，存储层的调用量会暴增，造成存储层也会挂掉的情况。</p>
-<p><img src="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021170804287.png" alt="image-20201021170804287" class="fancybox"></p>
+<p><img src="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20201021170804287.png" alt="image-20201021170804287" class="fancybox"></p>
 <p>其实集中过期，倒不是非常致命，比较致命的缓存雪崩，是缓存服务器某个节点宕机或断网。因为自然形成的缓存雪崩，一定是在某个时间段集中创建缓存，这个时候，数据库也是可以顶住压力的。无非就是对数据库产生周期性的压力而已。而缓存服务节点的宕机，对数据库服务器造成的压力是不可预知的，很有可能瞬间就把数据库压垮。</p>
 <p>双11：停掉一些服务，( 保证主要的服务可用 )</p>
 <blockquote>
@@ -630,7 +630,7 @@ Master接到命令，启动后台的存盘进程，同时收集所有接收到�
       
       <blockquote>
         
-        <strong>本文链接：</strong><br><a href="http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">http://lampkins.gitee.io/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</a>
+        <strong>本文链接：</strong><br><a href="http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">http://lampkins.gitee.io/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</a>
       </blockquote>
     </div>
     <footer class="mdui-card-actions">
@@ -676,15 +676,15 @@ Master接到命令，启动后台的存盘进程，同时收集所有接收到�
 
   <nav id="paginator">
     
-      <a rel="prev" class="extend prev" href="/2020/10/14/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+      <a rel="prev" class="extend prev" href="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/">
         <button aria-label="prev" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_back</i></button>
-        <span class="mdui-p-x-3" mdui-tooltip="{content: 'JMM Java内存模型'}">上一篇</span>
+        <span class="mdui-p-x-3" mdui-tooltip="{content: 'Java虚拟机 JVM笔记'}">上一篇</span>
       </a>
     
     <div class="spacer"></div>
     
-      <a rel="next" class="extend next" href="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/">
-        <span class="mdui-p-x-3" mdui-tooltip="{content: 'Java虚拟机 JVM笔记'}">下一篇</span>
+      <a rel="next" class="extend next" href="/2020/09/12/Markdown-Demo-%E6%B5%8B%E8%AF%95/">
+        <span class="mdui-p-x-3" mdui-tooltip="{content: 'Markdown Demo 测试'}">下一篇</span>
         <button aria-label="next" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_forward</i></button>
       </a>
     

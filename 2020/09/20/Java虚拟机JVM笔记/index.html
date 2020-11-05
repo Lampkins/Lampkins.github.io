@@ -15,32 +15,32 @@
   <meta name="description" content="JVM是JRE的一部分，是一个虚构出来的计算机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。  ¶ JVM探究  请你谈谈你对JVM的理解？java8虚拟机和之前的变化更新” 什么是OOM？什么是栈溢出StackOverFlowError？怎么分析？ JVM的常用调优参数有哪些？ 内存快照如何抓取？怎么分析Dump文件?知道吗？谈谈JVM中，类加载器你的认识？   jvm java运行时">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java虚拟机 JVM笔记">
-<meta property="og:url" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:url" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="博客">
 <meta property="og:description" content="JVM是JRE的一部分，是一个虚构出来的计算机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。  ¶ JVM探究  请你谈谈你对JVM的理解？java8虚拟机和之前的变化更新” 什么是OOM？什么是栈溢出StackOverFlowError？怎么分析？ JVM的常用调优参数有哪些？ 内存快照如何抓取？怎么分析Dump文件?知道吗？谈谈JVM中，类加载器你的认识？   jvm java运行时">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004185637450.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201101152617785.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004214922822.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201005183502733.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004230714888.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/7634245-7b7882e1f4ea5d7d.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201005231633641.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006182522720.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006223130183.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006234524118.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201007225319656.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155401200.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155131800.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155936528.png">
-<meta property="og:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201012155842619.png">
-<meta property="article:published_time" content="2020-10-12T11:53:49.000Z">
-<meta property="article:modified_time" content="2020-11-03T03:46:43.268Z">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004185637450.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201101152617785.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004214922822.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201005183502733.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004230714888.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/7634245-7b7882e1f4ea5d7d.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201005231633641.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006182522720.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006223130183.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006234524118.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201007225319656.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155401200.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155131800.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155936528.png">
+<meta property="og:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201012155842619.png">
+<meta property="article:published_time" content="2020-09-20T11:53:49.000Z">
+<meta property="article:modified_time" content="2020-11-05T11:40:03.571Z">
 <meta property="article:author" content="Lampkins">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004185637450.png">
+<meta name="twitter:image" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004185637450.png">
 
   <meta name="keywords" content=",Java,JVM">
   <meta name="format-detection" content="telephone=no,email=no">
@@ -48,7 +48,7 @@
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="博客">
-  <meta name="msapplication-starturl" content="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/">
+  <meta name="msapplication-starturl" content="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/">
   <meta name="msapplication-navbutton-color" content="#9C27B0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="博客">
@@ -56,7 +56,7 @@
   <link rel="apple-touch-icon" href="/images/favicon.png">
 
   
-    <link rel="canonical" href="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/">
+    <link rel="canonical" href="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/">
   
 
   
@@ -126,7 +126,7 @@
       </div>
       <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
         
-        <a class="mdui-ripple sidebar_archives-link" href="/archives/2020/11/">十一月 2020<span class="mdui-ripple sidebar_archives-count">2</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/10/">十月 2020<span class="mdui-ripple sidebar_archives-count">11</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/09/">九月 2020<span class="mdui-ripple sidebar_archives-count">1</span></a>
+        <a class="mdui-ripple sidebar_archives-link" href="/archives/2020/11/">十一月 2020<span class="mdui-ripple sidebar_archives-count">2</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/10/">十月 2020<span class="mdui-ripple sidebar_archives-count">8</span></a><a class="mdui-ripple sidebar_archives-link" href="/archives/2020/09/">九月 2020<span class="mdui-ripple sidebar_archives-count">4</span></a>
         
       </div>
     </div>
@@ -191,13 +191,13 @@
   <style>#main article .mdui-card-content .center-block{display:block!important;margin-right:auto!important;margin-left:auto!important}</style>
   <article class="mdui-card mdui-m-b-5" style="margin-top: -40px !important;">
     <header class="mdui-card-media">
-      <img src="/images/random/material-16.png" style="max-height: 240px;">
+      <img src="/images/random/material-8.png" style="max-height: 240px;">
       <div class="mdui-card-media-covered">
         <div class="mdui-card-primary">
           <div class="mdui-card-primary-title">Java虚拟机 JVM笔记</div>
           <div class="mdui-card-primary-subtitle">
             
-            <i class="iconfont">&#xe697;</i> 2020-10-12 / <i class="iconfont">&#xe601;</i> Lampkins &nbsp;&nbsp; <span id="busuanzi_container_page_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_page_pv"></span></span>
+            <i class="iconfont">&#xe697;</i> 2020-09-20 / <i class="iconfont">&#xe601;</i> Lampkins &nbsp;&nbsp; <span id="busuanzi_container_page_pv" style="display: none;"><i class="iconfont">&#xe7fd;</i> <span id="busuanzi_value_page_pv"></span></span>
           </div>
         </div>
       </div>
@@ -210,7 +210,7 @@
             
             <li class="mdui-menu-item" disabled>
               
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ4AAAEOCAAAAABd2qZ5AAADhUlEQVR42u3ayW7CQBAFQP7/p5NrJBTzehnHkconlADjLh+aXl5frh/XCwEOHDhw4MCBAwcOHA/meMVX87C3b3h/fX3i9d/nseDAgQMHjhMcSUi94JNbv/6eD8FcAiWx4MCBAweOcxxJSrsOIAns+u/VIPMUjgMHDhw4/iPHPO310jYOHDhw4PjvHHkDMU+0eTsyT884cODAgeNvOfIy6cSIKGkO9srIg71SHDhw4MAxXmh4/utb9ztw4MCBA8cbR/X67fjq0Ki6+jBZs/gQEQ4cOHDgWOXoNf62SrXrkVV1lNVsNeLAgQMHjlWOvCXXS8m99bh5eZYvZODAgQMHjl2OXlpN3lnFuufxRL87cODAgQPHmKNadF2n0l7Ak2/o3T8OHDhw4DjBkTTjkvZf8rqapHfPxYEDBw4c93BUi6K8rMrXGvLPbj02HDhw4MBxjqMafJ6et9Jwb22isAaBAwcOHDgOcOQlVi9Z9rh737OQaHHgwIEDx7iEq66dJenw+nbzkHKOZlMSBw4cOHCsckwSVY8gb0dWV6577UgcOHDgwHGCIwl73ozLlxXm46vCjwAcOHDgwLHKMU9d1ZuoJtpqwbncHMSBAwcOHIOxU34T1c/2isA8DS//7sCBAwcOHEsck2B6C9l5as+bg8l/ceDAgQPHOY7khnqNvAS69xgmw7CoosWBAwcOHGOOXlNvqzyrpudeYxEHDhw4cNzJkQ+QJomzetYEZaGEw4EDBw4cS92wycgnbxT2isPkrPICHw4cOHDgWOXoHZysrFVpErgkyFFzEAcOHDhwHJiz5AOnatmWUybl5XzNDgcOHDhwnOCYjJSqQ6A8BfbaiPl7cODAgQPHOY5zq2/Vperqe3oPrDmFw4EDBw4cLY784HyRrpcIJ4sROQQOHDhw4LiHoxp2j7K8djB4AOVeKQ4cOHDgOMzRW6FLmoNJCTcZZUV3iwMHDhw4VjmqV7V8qkJM3lktIHHgwIEDxwmOV3zlTPkaXL4MNxlZlZuDOHDgwIFjzNELdXLr89FUr5k42u/AgQMHDhxFjt31tWobcZ5Qez8XcODAgQPHczh6Cw15GPlCQz64woEDBw4cz+SYpNI8YU8GUYW2Jg4cOHDgOMZRXWKYLDTkw6HqksStYyccOHDgwDFeaNht/+V3kp+Vp1gcOHDgwHGCw4UDBw4cOHDgwIEDB46HXd8iGdlST0OqWQAAAABJRU5ErkJggg==">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ4AAAEOCAAAAABd2qZ5AAADh0lEQVR42u3aQW7jQAwEQP//09nrAkGUbnLGcIDSKXCykqZ84LLJ15frv+uFAAcOHDhw4MCBAweOD+Z4xdfwYd/u8P3n5yc+f74/Cw4cOHDguMGRHGl2+OTVn+/zy2EegZKz4MCBAweOexxJSXs+QHKw58/bQ+YlHAcOHDhw/EWOfdmblW0cOHDgwPHXOfLoMC+0s3viwIEDB45P5sjbpOSQyavnv920kRezUhw4cODAsV5o+Pyf37rfgQMHDhw4vnG0VxsU5mHi8+rD17ULBw4cOHCc5WhXojfxXDuyakdZw6gRBw4cOHAc5cgjuVkMN1uP27dn+UIGDhw4cOA4y9GW1V9uHbdbs2WITTv341eLAwcOHDgucLTR3qk75Gt5N56OAwcOHDhucCRh3+yRbVCYt2F5kzYMB3HgwIEDx4KjbcNmAWIbMubLcAnlgRYOBw4cOHDEHJsCeXZRe3/UvEjjwIEDB47bHO16webzTSs4CxnrQosDBw4cONYtXLt2lpTDJGRMjtSOvupQEgcOHDhwXOZoS29LMFun27d5P54CBw4cOHBc45iFcbNXKcK7+M6ztQYcOHDgwHGPY1a6kpHVptDu1ylW4SAOHDhw4Fhw5C/RFsJZE5jfM3krHDhw4MDxHo72pvkjNwtz7QBpttKHAwcOHDhucCQvtCmlt4v3bHkCBw4cOHDc5piFem1c2L76bKm6jiBx4MCBA8cFjnyA9IyV/LYdVs2K7oEWDgcOHDhwHErDcqw2hkv+bV6S23copnA4cODAgWPBMXvwZgjUFuB24XsVDuLAgQMHjgtzlraV2jPlcWRezov4EgcOHDhwHOVo47l8TWF2gFlk2f4NDhw4cOC4x9FCzIpoPgpq479ZrIkDBw4cON7DkYd3+SezQrhZjMghcODAgQPHbY58XNQOqzZjpP0XUGelOHDgwIHjKEcS57XDnlkzlg/DZsQ4cODAgeMGR3u17VMLsfnLYfOJAwcOHDiOcrziK2fK1+DyZbjNyKoOB3HgwIEDx5pjdtTNq+9HU7MwcbXQgAMHDhw4So7N+lo+HNpA50U9/+8CDhw4cOD4HI7keG2bN4POB1c4cODAgeMzOTZNVD5k2gyiilgTBw4cOHBc42iXGPblORkOtUsSbx074cCBAweO9ULD2fgvf5PNF1MXWhw4cODAseBw4cCBAwcOHDhw4MCB48Ouf7vy2VL2nGRCAAAAAElFTkSuQmCC">
               
             </li>
           </ul>
@@ -219,25 +219,25 @@
           <button class="mdui-btn mdui-btn-icon mdui-text-color-white" mdui-menu="{target: '#share_menu', align: 'right'}"><i class="mdui-icon material-icons">share</i></button>
           <ul class="mdui-menu" id="share_menu">
             <li class="mdui-menu-item">
-              <a href="http://service.weibo.com/share/share.php?appkey=&title=Java虚拟机 JVM笔记&url=http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/&pic=http://lampkins.gitee.io/images/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
+              <a href="http://service.weibo.com/share/share.php?appkey=&title=Java虚拟机 JVM笔记&url=http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/&pic=http://lampkins.gitee.io/images/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://twitter.com/intent/tweet?text=Java虚拟机 JVM笔记&url=http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/&via=Lampkins" target="_blank" class="mdui-ripple">分享到 Twitter</a>
+              <a href="https://twitter.com/intent/tweet?text=Java虚拟机 JVM笔记&url=http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/&via=Lampkins" target="_blank" class="mdui-ripple">分享到 Twitter</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://www.facebook.com/sharer/sharer.php?u=http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://plus.google.com/share?url=http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 Google+</a>
+              <a href="https://plus.google.com/share?url=http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 Google+</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/&title=Java虚拟机 JVM笔记" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
+              <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/&title=Java虚拟机 JVM笔记" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="http://connect.qq.com/widget/shareqq/index.html?site=博客&title=Java虚拟机 JVM笔记&pics=http://lampkins.gitee.io/images/favicon.png&url=http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 QQ</a>
+              <a href="http://connect.qq.com/widget/shareqq/index.html?site=博客&title=Java虚拟机 JVM笔记&pics=http://lampkins.gitee.io/images/favicon.png&url=http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/" target="_blank" class="mdui-ripple">分享到 QQ</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://telegram.me/share/url?url=http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/&text=Java虚拟机 JVM笔记" target="_blank" class="mdui-ripple">分享到 Telegram</a>
+              <a href="https://telegram.me/share/url?url=http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/&text=Java虚拟机 JVM笔记" target="_blank" class="mdui-ripple">分享到 Telegram</a>
             </li>
           </ul>
         
@@ -258,14 +258,14 @@
 <p><a target="_blank" rel="noopener" href="https://processon.com/view/5ea7a1b9e401fd21c196eb17"><strong>JVM内存模型完整版</strong></a></p>
 </blockquote>
 <h2 id="1.%20JVM%E7%9A%84%E4%BD%8D%E7%BD%AE"><a class="header-anchor" href="#1.%20JVM%E7%9A%84%E4%BD%8D%E7%BD%AE">¶</a> 1. JVM的位置</h2>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004185637450.png" alt="image-20201004185637450" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004185637450.png" alt="image-20201004185637450" class="fancybox"></p>
 <h2 id="2.%20JVM%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><a class="header-anchor" href="#2.%20JVM%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84">¶</a> 2. JVM的体系结构</h2>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201101152617785.png" alt="image-20201101152617785"></p>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004214922822.png" alt="image-20201004214922822" class="fancybox"></p>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201005183502733.png" alt="创建对象内存分析" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201101152617785.png" alt="image-20201101152617785"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004214922822.png" alt="image-20201004214922822" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201005183502733.png" alt="创建对象内存分析" class="fancybox"></p>
 <h2 id="3.%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><a class="header-anchor" href="#3.%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8">¶</a> 3. 类加载器</h2>
 <p>作用：加载Class文件</p>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004230714888.png" alt="image-20201004230714888" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201004230714888.png" alt="image-20201004230714888" class="fancybox"></p>
 <p>虚拟机自带的加载器</p>
 <ol>
 <li>
@@ -299,7 +299,7 @@
 Class Not Found ~</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (getClassLoadingLock(name)) &#123;</span><br><span class="line">    <span class="comment">// 从内存中检查该类是否已被加载过，没有则执行加载流程</span></span><br><span class="line">    Class&lt;?&gt; c = findLoadedClass(name);</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">                c = parent.loadClass(name, <span class="keyword">false</span>); <span class="comment">// 委托给父类加载器加载</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                c = findBootstrapClassOrNull(name); <span class="comment">// 没有父类则委托给启动类加载器加载</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            <span class="comment">// ClassNotFoundException thrown if class not found from the non-null parent class loader</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 如果向上委托没有找到，则用当前加载器(不含启动类加载器)去查找并加载</span></span><br><span class="line">            c = findClass(name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (resolve) &#123; <span class="comment">//是否需要在加载时解析类</span></span><br><span class="line">        resolveClass(c);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/7634245-7b7882e1f4ea5d7d.png" alt="7634245-7b7882e1f4ea5d7d.png" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/7634245-7b7882e1f4ea5d7d.png" alt="7634245-7b7882e1f4ea5d7d.png" class="fancybox"></p>
 <p><strong>作用</strong></p>
 <ul>
 <li>防止加载同一个<code>.class</code>。通过委托向上一级询问，加载过了，就不用再加载一遍，保证数据安全</li>
@@ -338,7 +338,7 @@ Class Not Found ~</li>
 <p>线程结束栈内存就释放了，栈内存空了程序就结束了；不存在垃圾回收问题</p>
 <p>栈内存常存放：局部变量 基本数据类型、对象引用、方法引用</p>
 <p>栈内存运行原理：栈帧</p>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201005231633641.png" alt="栈内存及栈帧" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201005231633641.png" alt="栈内存及栈帧" class="fancybox"></p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yanl55555/p/12616356.html">Java虚拟机栈–栈帧</a></p>
 </blockquote>
@@ -351,7 +351,7 @@ Class Not Found ~</li>
 <h2 id="11.%20%E5%A0%86%E5%86%85%E5%AD%98"><a class="header-anchor" href="#11.%20%E5%A0%86%E5%86%85%E5%AD%98">¶</a> 11. 堆内存</h2>
 <p>Heap，一个JVM只有一个堆内存，堆内存的大小是可以调节的。<br>
 类加载器读取了类文件后，一般会把什么东西放到堆中？<mark>类, 方法，常量，变量，保存引用类型的真实对象</mark></p>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006182522720.png" alt="堆内存模型" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006182522720.png" alt="堆内存模型" class="fancybox"></p>
 <ul>
 <li>新生区
 <ul>
@@ -389,9 +389,9 @@ Class Not Found ~</li>
 <p>-Xms<size> 设置初始Java堆大小</size></p>
 <p>Xmx<size> 设置最大Java堆大小</size></p>
 </blockquote>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006223130183.png" alt="image-20201006223130183"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006223130183.png" alt="image-20201006223130183"></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -Xms8m -Xmx8m -XX:+PrintGCDetails</span></span><br><span class="line">String str = <span class="string">&quot;str&quot;</span>;</span><br><span class="line"><span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">    str = str +<span class="keyword">new</span> Random().nextInt(<span class="number">999999999</span>)+str;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 先进行了5次轻GC，Eden区进入Survivor区导致，满了（或者年龄即轻GC次数到了），进入老年代，老年代满了，进行第一次重GC，清理年轻代，清理老年代(丢弃或进入元空间)...最后Java堆 老年代和元空间都满了 抛出OOM异常</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006234524118.png" alt="image-20201006234524118"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201006234524118.png" alt="image-20201006234524118"></p>
 <blockquote>
 <p>GC表示的是进行一次Minor GC<br>
 Allocation Failure：表示分配担保失败。<br>
@@ -443,7 +443,7 @@ Metaspace元数据空间垃圾回收</p>
 <p>​		一个对象如果没有任何与之关联的引用，即他的引用计数都为0，则说明对象不太可能再被用到，那么这个对象就是可回收对象。会出现<strong>循环引用问题</strong></p>
 </li>
 </ul>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201007225319656.png" alt="image-20201007225319656" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201007225319656.png" alt="image-20201007225319656" class="fancybox"></p>
 <ul>
 <li>
 <p><strong>可达性分析</strong></p>
@@ -457,19 +457,19 @@ Metaspace元数据空间垃圾回收</p>
 <p>将内存按内存容量划分为等大小的两块，当这块内存需要垃圾回收时,将此区域还存活的对象复制到另一块中，然后把这块内存清理掉。</p>
 <p>每次对整个半区进行操作，解决了内存碎片化的问题，但会多使用一定的内存空间，且存活对象较多时，效率会大大降低。</p>
 <p><strong>最佳应用场景：</strong> 对象存活度较低的时候，新生代</p>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155401200.png" alt="image-20201011155401200" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155401200.png" alt="image-20201011155401200" class="fancybox"></p>
 </li>
 <li>
 <p><strong>标记清除法</strong></p>
 <p>最基础的垃圾回收算法，分为两个阶段，<mark>标记和清除</mark>。标记阶段标记出所有需要回收的对象，清除阶段回收所有被标记的对象。</p>
 <p>内存碎片化严重，可能发生大对象找不到可利用空间的问题。</p>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155131800.png" alt="image-20201011155131800" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155131800.png" alt="image-20201011155131800" class="fancybox"></p>
 </li>
 <li>
 <p><strong>标记整理法</strong></p>
 <p>标记后将存活对象移向内存的一端，然后清除端边界外的对象。</p>
 <p>防止了内存碎片的产生，整理需耗用一定时间</p>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155936528.png" alt="image-20201011155936528" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201011155936528.png" alt="image-20201011155936528" class="fancybox"></p>
 </li>
 <li>
 <p><strong>标记清除整理</strong>：先标记清除，内存碎片较多时再使用标记整理</p>
@@ -496,7 +496,7 @@ Metaspace元数据空间垃圾回收</p>
 <h2 id="16.%20JMM(Java%20Memory%20Model)"><a class="header-anchor" href="#16.%20JMM(Java%20Memory%20Model)">¶</a> 16. JMM(Java Memory Model)</h2>
 <p>​		JMM决定一个线程对共享变量的写入何时对另一个线程可见。从抽象的角度来看，JMM定义了线程和主内存之间的抽象关系：<mark>线程之间的共享变量存储在主内存（main memory）中，每个线程都有一个私有的本地内存（local memory），本地内存中存储了该线程以读/写共享变量的副本。</mark></p>
 <p>​		本地内存是JMM的一个抽象概念，并不真实存在。它涵盖了缓存，写缓冲区，寄存器以及其他的硬件和编译器优化。其关系模型图如下图所示：JMM对这八种指令的使用，制定了如下规则：</p>
-<p><img src="/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201012155842619.png" alt="image-20201012155842619" class="fancybox"></p>
+<p><img src="/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/image-20201012155842619.png" alt="image-20201012155842619" class="fancybox"></p>
 <blockquote>
 <p>更多内容：<a target="_blank" rel="noopener" href="https://blog.csdn.net/TJtulong/article/details/89598598">深入理解java虚拟机（全章节完整）</a></p>
 </blockquote>
@@ -508,7 +508,7 @@ Metaspace元数据空间垃圾回收</p>
       
       <blockquote>
         
-        <strong>本文链接：</strong><br><a href="http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/">http://lampkins.gitee.io/2020/10/12/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/</a>
+        <strong>本文链接：</strong><br><a href="http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/">http://lampkins.gitee.io/2020/09/20/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E7%AC%94%E8%AE%B0/</a>
       </blockquote>
     </div>
     <footer class="mdui-card-actions">
@@ -554,15 +554,15 @@ Metaspace元数据空间垃圾回收</p>
 
   <nav id="paginator">
     
-      <a rel="prev" class="extend prev" href="/2020/10/13/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+      <a rel="prev" class="extend prev" href="/2020/09/20/JMM-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
         <button aria-label="prev" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_back</i></button>
-        <span class="mdui-p-x-3" mdui-tooltip="{content: 'Redis基础 学习笔记'}">上一篇</span>
+        <span class="mdui-p-x-3" mdui-tooltip="{content: 'JMM Java内存模型'}">上一篇</span>
       </a>
     
     <div class="spacer"></div>
     
-      <a rel="next" class="extend next" href="/2020/09/12/Markdown-Demo-%E6%B5%8B%E8%AF%95/">
-        <span class="mdui-p-x-3" mdui-tooltip="{content: 'Markdown Demo 测试'}">下一篇</span>
+      <a rel="next" class="extend next" href="/2020/09/16/Redis%E5%9F%BA%E7%A1%80-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+        <span class="mdui-p-x-3" mdui-tooltip="{content: 'Redis基础 学习笔记'}">下一篇</span>
         <button aria-label="next" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_forward</i></button>
       </a>
     
