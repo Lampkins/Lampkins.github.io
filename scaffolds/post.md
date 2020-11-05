@@ -2,6 +2,7 @@
 title: {{ title }}
 date: {{ date }}
 author: Lampkins
+reprint: false
 categories:
 tags:
 qrcode: true

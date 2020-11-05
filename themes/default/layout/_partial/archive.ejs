@@ -31,7 +31,12 @@
         <div class="mdui-card-media-covered">
           <div class="mdui-card-primary">
             <div class="mdui-card-primary-title"><%= post.title %></div>
-            <div class="mdui-card-primary-subtitle"><i class="iconfont">&#xe697;</i> <%- date(post.date) %> / <i class="iconfont">&#xe601;</i> <%= post.author || config.author %></div>
+            <div class="mdui-card-primary-subtitle">
+            	<% if (post.reprint) {%>
+            		<img style="  width: 36px;height: 32px;line-height: 24px;display: inline;margin-bottom: -10px;" src="/images/reprint.png" alt="reprint">
+            	<% } %>
+            	<i class="iconfont">&#xe697;</i> <%- date(post.date) %> / <i class="iconfont">&#xe601;</i> <%= post.author || config.author %>
+            </div>
           </div>
         </div>
         <% if (post.top) { %>
