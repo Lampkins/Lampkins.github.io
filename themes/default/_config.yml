@@ -44,6 +44,8 @@ pages:
 - name: 画廊
   link: /gallery
 links:
+- name: 个人简历
+  link: /pdf/简历-成都-刘成锐.pdf
 - name: 路过图床
   link: https://imgchr.com/3312862586
 - name: 博客托管

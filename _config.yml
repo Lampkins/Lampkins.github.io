@@ -110,7 +110,6 @@ deploy:
   repo: git@gitee.com:lampkins/lampkins.git
   branch: master
 
-
 # Markdown
 ## Docs: https://github.com/niemingzhao/hexo-renderer-markdown#readme
 markdown:

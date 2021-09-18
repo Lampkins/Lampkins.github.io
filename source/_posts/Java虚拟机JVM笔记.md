@@ -2,7 +2,7 @@
 uuid: 12905e29-d01a-8b25-864c-12be8d3bffd6
 author: Lampkins
 title: Java虚拟机 JVM笔记
-date: 2020-10-12 19:53:49
+date: 2020-9-20 19:53:49
 qrcode: true
 share_menu: true
 toc: true
