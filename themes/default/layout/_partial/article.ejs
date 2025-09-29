@@ -11,6 +11,34 @@
   </article>
   <%- js([theme.gallery.jquery_js, theme.gallery.lazyload_js, theme.gallery.fancybox_js]) %>
   <script>$("#main article img.lazyload").lazyload({effect:"fadeIn"});</script>
+<% } else if (page.timeline && site.posts.length) { %>
+  <style>
+    #timeline{max-width:750px;margin:0 auto;padding:0 8px}
+    #timeline h2{margin:.6em 0}
+    #timeline a{position:relative;display:-webkit-box;display:-ms-flexbox;display:flex;padding:8px 0;text-decoration:none;color:inherit;word-break:break-word;-webkit-transition:all .28s ease;transition:all .28s ease}
+    #timeline a:before{content:'';position:absolute;top:0;left:24px;z-index:1;width:2px;height:8px;background:#9c27b0}
+    #timeline a:after{content:'';position:absolute;top:24px;left:24px;z-index:1;width:2px;height:calc(100% - 24px);background:#9c27b0}
+    #timeline a span:first-child{-ms-flex-negative:0;flex-shrink:0;width:64px;margin-left:48px}
+    #timeline a span:first-child:before{content:'';position:absolute;top:8px;left:17px;z-index:2;width:16px;height:16px;border-radius:8px;background:#9c27b0;-webkit-transform:scale(.5);transform:scale(.5);-webkit-transition:all .28s ease;transition:all .28s ease}
+    #timeline a:hover{background-color:rgba(0,0,0,.1)}
+    .mdui-theme-layout-dark #timeline a:hover{background-color:rgba(255,255,255,.1)}
+    #timeline a:hover span:first-child:before{-webkit-transform:scale(.8);transform:scale(.8)}
+    #timeline a .mdui-icon{padding-left:8px;font-size:1em;color:#9c27b0;-webkit-transform:scale(1.5);transform:scale(1.5)}
+  </style>
+  <article id="timeline">
+    <% var year = -1 %>
+    <% site.posts.sort('date', -1).each(function(post) { %>
+      <% post.year = date(post.date, 'YYYY') %>
+      <% if (post.year && post.year !== year) { %>
+        <% year = post.year %>
+        <h2><%= year %></h2>
+      <% } %>
+      <a href="<%- url_for(post.link || post.path) %>"<% if (post.link) { %> target="_blank"<% } %>>
+        <span><%= date(post.date, 'MM-DD') %></span>
+        <span><%= post.title %><% if (post.sticky || post.top) { %><i class="mdui-icon material-icons">fiber_pin</i><% } %></span>
+      </a>
+    <% }) %>
+  </article>
 <% } else if (page.tagcloud && site.tags.length) { %>
   <style>
     #tagcloud a{margin:0 8px;padding:8px 0;line-height:40px;white-space:nowrap;text-decoration:none;opacity:.87;-webkit-transition:all .2s cubic-bezier(.4,0,.2,1);-o-transition:all .2s cubic-bezier(.4,0,.2,1);transition:all .2s cubic-bezier(.4,0,.2,1)}

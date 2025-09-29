@@ -67,6 +67,7 @@ JVM是JRE的一部分，是一个虚构出来的计算机，是通过在实际�
    用户自定义的类加载器,可加载指定路径的`class`文件
 
 ```java
+ClassLoader classLoader = ClassLoader.getSystemClassLoader(); // 获取系统的 ClassLoader
 System.out.println(classLoader); //AppClassLoader
 System.out.println(classLoader.getParent()); //ExtClassLoader jre\lib\ext
 System.out.println(classLoader.getParent().getParent); //null jre\lib\rt.jar
@@ -85,7 +86,7 @@ APP -- EXC -- BOOT
 3. 将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器
 4. 启动类加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则， 抛出异常，通知子加载器进行加载
 5. 重复步骤4
-   Class Not Found ~
+   Class Not Found 
 
 ```java
 synchronized (getClassLoadingLock(name)) {
@@ -146,7 +147,7 @@ native关键字：说明java的作用范围达不到了，进入本地方法栈�
 ## 7. PC寄存器
 
 程序计数器: Program Counter Register
-		每个线程都有一个程序计数器，是线程私有的，就是一个指针， 指向方法区中的方法字节码(用来存储指向一条指令的地址，也即将要执行的指令代码)，在执行引擎读取下一-条指令,是一个非常小的内存空间，几乎可以忽略不计
+		每个线程都有一个程序计数器，是线程私有的，就是一个指针， 指向方法区中的方法字节码(用来存储指向一条指令的地址，也即将要执行的指令代码)，在执行引擎中用于读取下一条指令，是一个非常小的内存空间，几乎可以忽略不计
 
 ## 8. 方法区（静态区）
 

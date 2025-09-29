@@ -9,6 +9,7 @@
     owner: '<%= theme.comment.gitalk_owner %>',
     admin: ['<%= theme.comment.gitalk_owner %>'],
     id: '<%= page[theme.comment.gitalk_sid_type] %>' || location.pathname,
+    proxy: '<%= theme.comment.gitalk_proxy %>',
     distractionFreeMode: false
   });
   gitalk.render('gitalk-container');

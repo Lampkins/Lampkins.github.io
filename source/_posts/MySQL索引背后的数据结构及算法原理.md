@@ -1,8 +1,8 @@
 ---
 uuid: ef1e6583-05b6-5594-f86c-a6fe6d2a9720
 title: MySQL索引背后的数据结构及算法原理
-author: Lampkins
-reprint: true
+author: 张洋
+reprint: false
 qrcode: true
 share_menu: true
 toc: true

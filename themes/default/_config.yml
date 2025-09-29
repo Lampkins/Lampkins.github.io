@@ -39,13 +39,15 @@ analytics:
   cnzz_site_id:
 
 pages:
+- name: 时间轴
+  link: /timeline
 - name: 标签云
   link: /tagcloud
-- name: 画廊
+- name: 画　廊
   link: /gallery
 links:
 - name: 个人简历
-  link: /pdf/简历-成都-刘成锐.pdf
+  link: /pdf/简历.pdf
 - name: 路过图床
   link: https://imgchr.com/3312862586
 - name: 博客托管
@@ -84,6 +86,7 @@ comment:
   gitalk_repo: Lampkins.github.io
   gitalk_owner: lampkins
   gitalk_sid_type: uuid
+  gitalk_proxy: https://proxy.cors.sh/https://github.com/login/oauth/access_token
   livere_data_uid:
   valine_leancloud_app_id:
   valine_leancloud_app_key:
